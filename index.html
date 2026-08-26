@@ -44,61 +44,9 @@
       overflow-x: hidden;
     }
 
-    .hidden-engine-trigger { display: none !important; }
-
-    #unlockTrigger:checked ~ #macLockScreen {
-      opacity: 0 !important;
-      visibility: hidden !important;
-      pointer-events: none !important;
-    }
-    #unlockTrigger:checked ~ #desktopApp {
-      display: flex !important;
-      opacity: 1 !important;
-      transform: translateY(0) !important;
-    }
-
-    #key-D:checked ~ main label[for="key-D"],
-    #key-V:checked ~ main label[for="key-V"],
-    #key-S:checked ~ main label[for="key-S"],
-    #key-T:checked ~ main label[for="key-T"],
-    #key-P:checked ~ main label[for="key-P"],
-    #key-B:checked ~ main label[for="key-B"],
-    #key-N:checked ~ main label[for="key-N"],
-    #key-A:checked ~ main label[for="key-A"],
-    #key-8:checked ~ main label[for="key-8"],
-    #key-G:checked ~ main label[for="key-G"],
-    #key-R:checked ~ main label[for="key-R"],
-    #key-K:checked ~ main label[for="key-K"],
-    #key-H:checked ~ main label[for="key-H"],
-    #key-W:checked ~ main label[for="key-W"],
-    #key-E:checked ~ main label[for="key-E"],
-    #key-J:checked ~ main label[for="key-J"],
-    #key-M:checked ~ main label[for="key-M"],
-    #key-SPACE:checked ~ main label[for="key-SPACE"] {
-      border-color: var(--cyan-glow) !important;
-      box-shadow: 0 5px 0 #07080d, 0 0 20px rgba(0, 242, 254, 0.4) !important;
-    }
-
-    .insp-content-card { display: none; }
-    #key-D:checked ~ main #card-D { display: block; }
-    #key-V:checked ~ main #card-V { display: block; }
-    #key-S:checked ~ main #card-S { display: block; }
-    #key-T:checked ~ main #card-T { display: block; }
-    #key-P:checked ~ main #card-P { display: block; }
-    #key-B:checked ~ main #card-B { display: block; }
-    #key-N:checked ~ main #card-N { display: block; }
-    #key-A:checked ~ main #card-A { display: block; }
-    #key-8:checked ~ main #card-8 { display: block; }
-    #key-G:checked ~ main #card-G { display: block; }
-    #key-R:checked ~ main #card-R { display: block; }
-    #key-K:checked ~ main #card-K { display: block; }
-    #key-H:checked ~ main #card-H { display: block; }
-    #key-W:checked ~ main #card-W { display: block; }
-    #key-E:checked ~ main #card-E { display: block; }
-    #key-J:checked ~ main #card-J { display: block; }
-    #key-M:checked ~ main #card-M { display: block; }
-    #key-SPACE:checked ~ main #card-SPACE { display: block; }
-
+    /* ========================================================
+       1. LOCK SCREEN & iMESSAGE SPOTLIGHT EFFECT
+       ======================================================== */
     #macLockScreen {
       position: fixed;
       inset: 0;
@@ -109,7 +57,7 @@
       align-items: center;
       gap: 16px;
       padding: 24px 20px;
-      transition: opacity 0.5s ease, visibility 0.5s;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
       background: radial-gradient(circle at 50% 30%, #0c152e 0%, #020408 85%);
       overflow: hidden;
     }
@@ -121,8 +69,9 @@
       width: 100vw;
       height: 100vh;
       z-index: 1;
-      opacity: 0.45;
+      opacity: 0.48;
       pointer-events: none;
+      filter: blur(1px);
     }
 
     .lock-content-layer {
@@ -139,6 +88,7 @@
       font-size: 1.15rem;
       font-weight: 600;
       color: rgba(255, 255, 255, 0.95);
+      margin-bottom: 0px;
       text-shadow: 0 2px 15px rgba(0, 0, 0, 0.9);
     }
     
@@ -153,6 +103,7 @@
       direction: ltr;
     }
 
+    /* iMessage Spatial Card */
     .imessage-container-card {
       width: 100%;
       max-width: 440px;
@@ -166,6 +117,7 @@
       display: flex;
       flex-direction: column;
       position: relative;
+      overflow: hidden;
     }
 
     .imessage-ios-header {
@@ -174,6 +126,8 @@
       align-items: center;
       padding-bottom: 10px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+      z-index: 2;
     }
     .imessage-contact-avatar {
       width: 44px;
@@ -203,6 +157,10 @@
       flex-direction: column;
       gap: 10px;
       padding: 12px 0 4px;
+      min-height: 115px;
+      justify-content: flex-start;
+      position: relative;
+      z-index: 2;
     }
 
     .imessage-bubble {
@@ -217,28 +175,79 @@
       font-weight: 600;
       line-height: 1.5;
       box-shadow: 0 6px 18px rgba(0, 122, 255, 0.35);
+      display: none;
+      transform: scale(0.85) translateY(12px);
+      transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+      z-index: 3;
+    }
+    .imessage-bubble.active {
+      display: block;
+      transform: scale(1) translateY(0);
+    }
+
+    /* Animated 3 Bouncing Dots Indicator */
+    .imessage-typing-bubble {
+      align-self: flex-start;
+      padding: 8px 14px;
+      border-radius: 18px 18px 18px 4px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: none;
+      align-items: center;
+      gap: 4px;
+      width: fit-content;
+      z-index: 3;
+    }
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ffffff;
+      opacity: 0.4;
+      animation: typingBounce 1s infinite ease-in-out;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+    @keyframes typingBounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+      40% { transform: translateY(-5px); opacity: 1; }
+    }
+
+    /* High-Voltage Spotlight Beam */
+    .spotlight-beam-overlay {
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 420px;
+      height: 320px;
+      background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.45) 0%, rgba(0, 122, 255, 0.35) 45%, transparent 75%);
       opacity: 0;
-      transform: translateY(10px);
-      animation: popBubble 0.4s ease forwards;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      filter: blur(10px);
+      z-index: 1;
     }
-    #msgBubble1 { animation-delay: 0.2s; }
-    #msgBubble2 { 
-      animation-delay: 0.8s; 
-      box-shadow: 0 0 30px rgba(255, 255, 255, 0.6), 0 0 45px rgba(0, 122, 255, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+    .spotlight-beam-overlay.active { opacity: 1; }
+
+    .bubble-spotlight-active {
+      box-shadow: 0 0 35px rgba(255, 255, 255, 0.8), 0 0 55px rgba(0, 122, 255, 0.9) !important;
+      border: 1px solid rgba(255, 255, 255, 0.85) !important;
     }
+
     .delivered-receipt {
       font-size: 0.68rem;
       color: rgba(255, 255, 255, 0.5);
       align-self: flex-start;
       margin-top: -4px;
       margin-right: 4px;
-      opacity: 0;
-      animation: fadeIn 0.4s ease 1s forwards;
+      display: none;
+      transition: opacity 0.3s ease;
+      z-index: 3;
     }
-
-    @keyframes popBubble { to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeIn { to { opacity: 1; } }
+    .delivered-receipt.active { display: block; }
 
     .lock-bottom-login {
       position: relative;
@@ -248,7 +257,7 @@
       align-items: center;
       width: 100%;
       max-width: 320px;
-      margin-top: 6px;
+      margin-top: 4px;
     }
     .lock-avatar-circle {
       width: 48px;
@@ -270,21 +279,24 @@
       cursor: pointer;
       transition: transform 0.2s ease;
     }
-    .lock-avatar-circle:hover { transform: scale(1.06); }
+    .lock-avatar-circle:hover { transform: scale(1.08); }
 
     .lock-input-pill {
       width: 100%;
       background: rgba(12, 16, 26, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.35);
       border-radius: 999px;
-      padding: 8px 16px;
+      padding: 6px 14px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
       -webkit-backdrop-filter: blur(30px);
       backdrop-filter: blur(30px);
       box-shadow: 0 12px 35px rgba(0,0,0,0.7);
-      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .lock-input-pill:focus-within {
+      border-color: #fff;
+      box-shadow: 0 0 35px rgba(255, 255, 255, 0.4);
     }
     .lock-password-field {
       background: transparent;
@@ -295,15 +307,18 @@
       flex: 1;
       text-align: center;
       font-family: "Vazirmatn", sans-serif;
-      cursor: pointer;
     }
+    .lock-password-field::placeholder { color: rgba(255, 255, 255, 0.55); font-size: 0.8rem; }
     .lock-submit-arrow {
       background: none;
       border: none;
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(255, 255, 255, 0.85);
       cursor: pointer;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
+      padding: 0 4px;
+      transition: transform 0.2s;
     }
+    .lock-submit-arrow:hover { transform: scale(1.15); color: #fff; }
     .lock-touch-id-text {
       font-size: 0.74rem;
       color: rgba(255, 255, 255, 0.8);
@@ -312,11 +327,14 @@
       cursor: pointer;
     }
 
+    /* ========================================================
+       2. WORKSPACE
+       ======================================================== */
     #desktopApp {
       display: none;
       opacity: 0;
       transform: translateY(20px);
-      transition: all 0.5s ease;
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
       width: 100%;
       max-width: 1280px;
       padding: 24px 16px 60px;
@@ -405,15 +423,21 @@
       flex-direction: column;
       justify-content: space-between;
       padding: 4px 6px;
-      transition: all 0.08s ease;
+      transition: all 0.08s cubic-bezier(0.2, 0.8, 0.4, 1);
     }
     .mac-key:hover {
       background: linear-gradient(180deg, #2c3245 0%, #1a1e2b 100%);
       border-color: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 5px 0 #07080d, 0 0 15px rgba(255,255,255,0.15);
     }
-    .mac-key:active {
+    .mac-key.pressed, .mac-key:active {
       transform: translateY(5px);
       box-shadow: 0 0 0 #07080d, inset 0 2px 4px rgba(0,0,0,0.6) !important;
+      background: #11131a;
+    }
+    .mac-key.active-key {
+      border-color: var(--cyan-glow);
+      box-shadow: 0 5px 0 #07080d, 0 0 20px rgba(0, 242, 254, 0.4);
     }
 
     .key-top-meta { display: flex; justify-content: space-between; align-items: center; }
@@ -475,13 +499,16 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.4);
       border: 1.5px solid rgba(255,255,255,0.85);
       cursor: pointer;
+      transition: transform 0.2s ease;
     }
-    .stk-vibe { background: linear-gradient(135deg, #ff007f, #7928ca); }
-    .stk-pytorch { background: linear-gradient(135deg, #ee4c2c, #f39c12); }
-    .stk-bigdata { background: linear-gradient(135deg, #00b4d8, #0077b6); }
-    .stk-n8n { background: linear-gradient(135deg, #ea2b5b, #ff6d5a); }
-    .stk-twin { background: linear-gradient(135deg, #00f2fe, #4facfe); color:#000; }
-    .stk-media { background: linear-gradient(135deg, #9b51e0, #e91e63); }
+    .vinyl-sticker:hover { transform: scale(1.08) rotate(0deg) !important; }
+
+    .stk-vibe { background: linear-gradient(135deg, #ff007f, #7928ca); transform: rotate(-4deg); }
+    .stk-pytorch { background: linear-gradient(135deg, #ee4c2c, #f39c12); transform: rotate(3deg); }
+    .stk-bigdata { background: linear-gradient(135deg, #00b4d8, #0077b6); transform: rotate(-3deg); }
+    .stk-n8n { background: linear-gradient(135deg, #ea2b5b, #ff6d5a); transform: rotate(5deg); }
+    .stk-twin { background: linear-gradient(135deg, #00f2fe, #4facfe); color:#000; transform: rotate(-3deg); }
+    .stk-media { background: linear-gradient(135deg, #9b51e0, #e91e63); transform: rotate(3deg); }
 
     .live-inspector-tray {
       width: 100%;
@@ -493,6 +520,7 @@
       -webkit-backdrop-filter: blur(30px);
       backdrop-filter: blur(30px);
       box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      transition: all 0.25s ease;
     }
     .insp-top {
       display: flex;
@@ -552,27 +580,6 @@
 </head>
 <body>
 
-  <input type="checkbox" id="unlockTrigger" class="hidden-engine-trigger" />
-  
-  <input type="radio" name="keyRadio" id="key-D" class="hidden-engine-trigger" checked />
-  <input type="radio" name="keyRadio" id="key-V" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-S" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-T" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-P" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-B" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-N" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-A" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-8" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-G" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-R" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-K" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-H" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-W" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-E" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-J" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-M" class="hidden-engine-trigger" />
-  <input type="radio" name="keyRadio" id="key-SPACE" class="hidden-engine-trigger" />
-
   <!-- ========================================================
        1. LOCK SCREEN
        ======================================================== -->
@@ -581,11 +588,15 @@
 
     <div class="lock-content-layer">
       <div class="lock-time-box">
-        <div class="lock-persian-date" id="livePersianDate">چهارشنبه، ۵ شهریور</div>
+        <div class="lock-persian-date" id="livePersianDate">در حال دریافت تقویم...</div>
         <div class="lock-clock-huge" id="liveClock">14:08</div>
       </div>
 
+      <!-- Foreground iMessage Card with High-Impact Spotlight Effect -->
       <div class="imessage-container-card">
+        <!-- Radial Spotlight Beam -->
+        <div class="spotlight-beam-overlay" id="spotlightBeam"></div>
+
         <div class="imessage-ios-header">
           <div class="imessage-contact-avatar">👨‍💻</div>
           <div class="imessage-contact-name">
@@ -593,28 +604,38 @@
           </div>
         </div>
 
-        <div class="imessage-chat-flow">
+        <div class="imessage-chat-flow" id="chatFlow">
+          <!-- Bubble 1 -->
           <div class="imessage-bubble" id="msgBubble1">
             خوش آمدید 👋
           </div>
 
+          <!-- Dynamic 3 Bouncing Dots -->
+          <div class="imessage-typing-bubble" id="typingBubble">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+          </div>
+
+          <!-- Bubble 2 -->
           <div class="imessage-bubble" id="msgBubble2">
             لطفاً رمز را وارد کنید 🔒
           </div>
-          <div class="delivered-receipt">Delivered</div>
+          <div class="delivered-receipt" id="deliveredTag">Delivered</div>
         </div>
       </div>
     </div>
 
+    <!-- Login Area -->
     <div class="lock-bottom-login">
-      <label for="unlockTrigger" class="lock-avatar-circle" onclick="triggerUnlockAudio()">AK</label>
+      <div class="lock-avatar-circle" onclick="handleUnlock(event)">AK</div>
 
-      <label for="unlockTrigger" class="lock-input-pill" onclick="triggerUnlockAudio()">
-        <span class="lock-password-field">روی اینتر یا دکمه بزنید...</span>
-        <span class="lock-submit-arrow">&rarr;</span>
-      </label>
+      <form class="lock-input-pill" id="lockForm" onsubmit="handleUnlock(event)">
+        <input type="password" id="passcodeInput" class="lock-password-field" placeholder="اینتر بزنید یا ۱۲۳۴ را وارد کنید..." autofocus />
+        <button type="submit" class="lock-submit-arrow">&rarr;</button>
+      </form>
 
-      <label for="unlockTrigger" class="lock-touch-id-text" onclick="triggerUnlockAudio()">Click to Unlock Portfolio</label>
+      <div class="lock-touch-id-text" onclick="handleUnlock(event)">Click Enter or Type 1234 to Unlock</div>
     </div>
   </div>
 
@@ -632,99 +653,99 @@
 
     <div class="keyboard-instruction-banner">
       <div class="banner-title">
-        <span>💡 روی هر دکمه کلیک کنید تا تخصص‌ها در پنل زیر باز شوند</span>
+        <span>💡 روی هر دکمه کلیک کنید یا با کیبورد خود تایپ کنید تا تخصص‌ها باز شوند</span>
       </div>
       <div class="banner-badge">INTERACTIVE WORKSPACE</div>
     </div>
 
     <div class="macbook-chassis">
-      <div class="macbook-keyboard-bed">
+      <div class="macbook-keyboard-bed" id="macKeysContainer">
         
-        <!-- Row 1 -->
+        <!-- Row 1: 7 Keys -->
         <div class="mac-row">
-          <label for="key-D" class="mac-key" onclick="_0x4a9b('D', 400)">
+          <div class="mac-key active-key" data-key="D" onclick="triggerKey('D')">
             <div class="key-top-meta"><span class="key-char">D</span><span class="key-symbol-badge">🌐</span></div>
             <div class="key-full-name">Digital Twin</div>
-          </label>
-          <label for="key-V" class="mac-key" onclick="_0x4a9b('V', 420)">
+          </div>
+          <div class="mac-key" data-key="V" onclick="triggerKey('V')">
             <div class="key-top-meta"><span class="key-char">V</span><span class="key-symbol-badge">🚗</span></div>
             <div class="key-full-name">V2X Mobility</div>
-          </label>
-          <label for="key-S" class="mac-key" onclick="_0x4a9b('S', 440)">
+          </div>
+          <div class="mac-key" data-key="S" onclick="triggerKey('S')">
             <div class="key-top-meta"><span class="key-char">S</span><span class="key-symbol-badge">🚦</span></div>
             <div class="key-full-name">SUMO Sim</div>
-          </label>
-          <label for="key-T" class="mac-key" onclick="_0x4a9b('T', 460)">
+          </div>
+          <div class="mac-key" data-key="T" onclick="triggerKey('T')">
             <div class="key-top-meta"><span class="key-char">T</span><span class="key-symbol-badge">🔄</span></div>
             <div class="key-full-name">TraCI Link</div>
-          </label>
-          <label for="key-P" class="mac-key" onclick="_0x4a9b('P', 480)">
+          </div>
+          <div class="mac-key" data-key="P" onclick="triggerKey('P')">
             <div class="key-top-meta"><span class="key-char">P</span><span class="key-symbol-badge">🧠</span></div>
             <div class="key-full-name">Deep RL</div>
-          </label>
-          <label for="key-B" class="mac-key" onclick="_0x4a9b('B', 500)">
+          </div>
+          <div class="mac-key" data-key="B" onclick="triggerKey('B')">
             <div class="key-top-meta"><span class="key-char">B</span><span class="key-symbol-badge">📊</span></div>
             <div class="key-full-name">Data ETL</div>
-          </label>
-          <label for="key-N" class="mac-key" onclick="_0x4a9b('N', 520)">
+          </div>
+          <div class="mac-key" data-key="N" onclick="triggerKey('N')">
             <div class="key-top-meta"><span class="key-char">N</span><span class="key-symbol-badge">💬</span></div>
             <div class="key-full-name">NLP Engine</div>
-          </label>
+          </div>
         </div>
 
-        <!-- Row 2 -->
+        <!-- Row 2: 6 Keys -->
         <div class="mac-row">
-          <label for="key-A" class="mac-key" onclick="_0x4a9b('A', 540)">
+          <div class="mac-key" data-key="A" onclick="triggerKey('A')">
             <div class="key-top-meta"><span class="key-char">A</span><span class="key-symbol-badge">🐍</span></div>
             <div class="key-full-name">Python Auto</div>
-          </label>
-          <label for="key-8" class="mac-key" onclick="_0x4a9b('8', 560)">
+          </div>
+          <div class="mac-key" data-key="8" onclick="triggerKey('8')">
             <div class="key-top-meta"><span class="key-char">8</span><span class="key-symbol-badge">⚡</span></div>
             <div class="key-full-name">n8n & Make</div>
-          </label>
-          <label for="key-G" class="mac-key" onclick="_0x4a9b('G', 580)">
+          </div>
+          <div class="mac-key" data-key="G" onclick="triggerKey('G')">
             <div class="key-top-meta"><span class="key-char">G</span><span class="key-symbol-badge">🤖</span></div>
             <div class="key-full-name">Agentic MCP</div>
-          </label>
-          <label for="key-R" class="mac-key" onclick="_0x4a9b('R', 600)">
+          </div>
+          <div class="mac-key" data-key="R" onclick="triggerKey('R')">
             <div class="key-top-meta"><span class="key-char">R</span><span class="key-symbol-badge">🚀</span></div>
             <div class="key-full-name">AEO/GEO SEO</div>
-          </label>
-          <label for="key-K" class="mac-key" onclick="_0x4a9b('K', 620)">
+          </div>
+          <div class="mac-key" data-key="K" onclick="triggerKey('K')">
             <div class="key-top-meta"><span class="key-char">K</span><span class="key-symbol-badge">✨</span></div>
             <div class="key-full-name">Vibe Coding</div>
-          </label>
-          <label for="key-H" class="mac-key" onclick="_0x4a9b('H', 640)">
+          </div>
+          <div class="mac-key" data-key="H" onclick="triggerKey('H')">
             <div class="key-top-meta"><span class="key-char">H</span><span class="key-symbol-badge">👁️</span></div>
             <div class="key-full-name">Image Hashing</div>
-          </label>
+          </div>
         </div>
 
-        <!-- Row 3 -->
+        <!-- Row 3: 4 Keys -->
         <div class="mac-row">
-          <label for="key-W" class="mac-key" onclick="_0x4a9b('W', 660)">
+          <div class="mac-key" data-key="W" onclick="triggerKey('W')">
             <div class="key-top-meta"><span class="key-char">W</span><span class="key-symbol-badge">📦</span></div>
             <div class="key-full-name">WordPress</div>
-          </label>
-          <label for="key-E" class="mac-key" onclick="_0x4a9b('E', 680)">
+          </div>
+          <div class="mac-key" data-key="E" onclick="triggerKey('E')">
             <div class="key-top-meta"><span class="key-char">E</span><span class="key-symbol-badge">🐘</span></div>
             <div class="key-full-name">PHP Backend</div>
-          </label>
-          <label for="key-J" class="mac-key" onclick="_0x4a9b('J', 700)">
+          </div>
+          <div class="mac-key" data-key="J" onclick="triggerKey('J')">
             <div class="key-top-meta"><span class="key-char">J</span><span class="key-symbol-badge">⚡</span></div>
             <div class="key-full-name">JavaScript</div>
-          </label>
-          <label for="key-M" class="mac-key" onclick="_0x4a9b('M', 720)">
+          </div>
+          <div class="mac-key" data-key="M" onclick="triggerKey('M')">
             <div class="key-top-meta"><span class="key-char">M</span><span class="key-symbol-badge">🎬</span></div>
             <div class="key-full-name">Creative Media</div>
-          </label>
+          </div>
         </div>
 
-        <!-- Row 4 -->
+        <!-- Row 4: Spacebar -->
         <div class="mac-row">
-          <label for="key-SPACE" class="mac-key key-space-bar" onclick="_0x4a9b(' ', 240)">
+          <div class="mac-key key-space-bar" data-key=" " onclick="triggerKey(' ')">
             <span class="space-center-text">[ SPACEBAR: FULL-STACK AUTOMATION & SYSTEMS THINKING ]</span>
-          </label>
+          </div>
         </div>
 
       </div>
@@ -732,246 +753,420 @@
       <!-- Deck -->
       <div class="macbook-bottom-deck">
         <div class="palm-stickers-cluster palm-left">
-          <label for="key-K" class="vinyl-sticker stk-vibe" onclick="_0x4a9b('K', 620)">✨ Vibe Coding</label>
-          <label for="key-P" class="vinyl-sticker stk-pytorch" onclick="_0x4a9b('P', 480)">🔥 PyTorch RL</label>
-          <label for="key-B" class="vinyl-sticker stk-bigdata" onclick="_0x4a9b('B', 500)">📊 Data ETL</label>
+          <div class="vinyl-sticker stk-vibe" onclick="triggerKey('K')">✨ Vibe Coding</div>
+          <div class="vinyl-sticker stk-pytorch" onclick="triggerKey('P')">🔥 PyTorch RL</div>
+          <div class="vinyl-sticker stk-bigdata" onclick="triggerKey('B')">📊 Data ETL</div>
         </div>
 
         <div class="mac-trackpad-glass"></div>
 
         <div class="palm-stickers-cluster palm-right">
-          <label for="key-D" class="vinyl-sticker stk-twin" onclick="_0x4a9b('D', 400)">🌐 Digital Twin</label>
-          <label for="key-8" class="vinyl-sticker stk-n8n" onclick="_0x4a9b('8', 560)">⚡ n8n & Make</label>
-          <label for="key-M" class="vinyl-sticker stk-media" onclick="_0x4a9b('M', 720)">🎬 Media Lead</label>
+          <div class="vinyl-sticker stk-twin" onclick="triggerKey('D')">🌐 Digital Twin</div>
+          <div class="vinyl-sticker stk-n8n" onclick="triggerKey('8')">⚡ n8n & Make</div>
+          <div class="vinyl-sticker stk-media" onclick="triggerKey('M')">🎬 Media Lead</div>
         </div>
       </div>
     </div>
 
-    <!-- Inspector Cards -->
-    <section class="live-inspector-tray">
-      
-      <div class="insp-content-card" id="card-D">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ D ] DIGITAL TWIN & CPS</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">CYBER-PHYSICAL SYSTEMS & DIGITAL TWIN</div>
-        </div>
-        <div class="insp-heading">معماری دوقلوی دیجیتال و مدل‌سازی سایبر-فیزیکی</div>
-        <p class="insp-details">تسلط بر مدل ۵ سطحی بلوغ دوقلوی دیجیتال (پیاده‌سازی سطح ۳ پیش‌بین بر بستر مقالات کنفرانس ایتالیا و گرجستان)؛ یکپارچه‌سازی بلادرنگ داده‌های سنسوری با مدل مجازی و شبیه‌سازی سناریوهای پیش‌بینانه (What-If Analysis) جهت بهینه‌سازی سیستم‌های پیچیده صنعتی، معدنی و شهری.</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">5-Level DT Maturity Framework</span><span class="insp-chip">Predictive Digital Twin (L3)</span><span class="insp-chip">Cyber-Physical Systems (CPS)</span><span class="insp-chip">Sensor Data Telemetry</span><span class="insp-chip">What-If Scenario Simulation</span>
-        </div>
+    <!-- Live Telemetry Inspector -->
+    <section class="live-inspector-tray" id="inspectorPanel">
+      <div class="insp-top">
+        <div class="insp-badge-key" id="inspBadge">[ D ] DIGITAL TWIN & CPS</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);" id="inspCategory">CYBER-PHYSICAL SYSTEMS & DIGITAL TWIN</div>
       </div>
-
-      <div class="insp-content-card" id="card-V">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ V ] V2X PROTOCOLS & MOBILITY</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">INTELLIGENT TRANSPORTATION SYSTEMS (ITS) & V2X</div>
-        </div>
-        <div class="insp-heading">ارتباطات V2X و حمل‌ونقل هوشمند</div>
-        <p class="insp-details">طراحی و مدل‌سازی پروتکل‌های ارتباطی خودرویی V2X (شامل ارتباط خودرو به زیرساخت V2I، خودرو به خودرو V2V و شبکه V2N)؛ پیاده‌سازی راهنمایی سرعت پویا، سناریوهای پلاتونینگ (Platooning با تنظیم tau و minGap) و مدیریت جریان ناوگان متصل (CAVs).</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">V2X Protocols (V2V / V2I / V2N)</span><span class="insp-chip">Connected Autonomous Vehicles (CAV)</span><span class="insp-chip">Platooning Optimization</span><span class="insp-chip">Speed Guidance Logic</span><span class="insp-chip">Adaptive Signal Control</span>
-        </div>
+      <div class="insp-heading" id="inspTitle">معماری دوقلوی دیجیتال و مدل‌سازی سایبر-فیزیکی</div>
+      <p class="insp-details" id="inspDesc">
+        تسلط بر مدل ۵ سطحی بلوغ دوقلوی دیجیتال (پیاده‌سازی سطح ۳ پیش‌بین بر بستر مقالات کنفرانس ایتالیا و گرجستان)؛ یکپارچه‌سازی بلادرنگ داده‌های سنسوری با مدل مجازی و شبیه‌سازی سناریوهای پیش‌بینانه (What-If Analysis) جهت بهینه‌سازی سیستم‌های پیچیده صنعتی، معدنی و شهری.
+      </p>
+      <div class="insp-chip-box" id="inspChipBox">
+        <span class="insp-chip">5-Level DT Maturity Framework</span>
+        <span class="insp-chip">Predictive Digital Twin (L3)</span>
+        <span class="insp-chip">Cyber-Physical Systems (CPS)</span>
+        <span class="insp-chip">Sensor Data Telemetry</span>
+        <span class="insp-chip">What-If Scenario Simulation</span>
       </div>
-
-      <div class="insp-content-card" id="card-S">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ S ] MICROSCOPIC TRAFFIC SIMULATION</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">MICROSCOPIC TRAFFIC & NETWORK MODELING</div>
-        </div>
-        <div class="insp-heading">شبیه‌سازی میکروسکوپیک با SUMO</div>
-        <p class="insp-details">مدل‌سازی و شبیه‌سازی میکروسکوپیک جریان‌های ترافیکی در شبیه‌ساز Eclipse SUMO؛ پیکربندی فایل‌های شبکه net.xml با Netedit، تعریف سناریوهای تقاضای سفر rou.xml، مدل‌سازی شبکه‌های تقاطع تکی (1x1) و شبکه ۹ تقاطعی (3x3) و تولید داده‌های سنتتیک.</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">Eclipse SUMO</span><span class="insp-chip">Netedit & XML Modeling</span><span class="insp-chip">Microscopic Simulation</span><span class="insp-chip">Grid Networks (1x1 & 3x3)</span><span class="insp-chip">Synthetic Data Generation</span>
-        </div>
-      </div>
-
-      <div class="insp-content-card" id="card-T">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ T ] REAL-TIME CO-SIMULATION & TraCI</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">CLOSED-LOOP CO-SIMULATION & INTERFACING</div>
-        </div>
-        <div class="insp-heading">هم‌شبیه‌سازی و کنترل برخط با TraCI</div>
-        <p class="insp-details">ایجاد پل ارتباطی سوکت بی‌درنگ (Co-Simulation) میان اسکریپت‌های پایتون و موتور شبیه‌ساز با پروتکل TraCI؛ استخراج برخط بردارهای وضعیت (طول صف، تاخیر و سرعت) و اعمال فرامین کنترلی دینامیک در حلقه‌های کنترلی بسته (Closed-Loop Control).></p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">TraCI Protocol</span><span class="insp-chip">Real-Time Co-Simulation</span><span class="insp-chip">Closed-Loop System Control</span><span class="insp-chip">State Extraction & Observation</span><span class="insp-chip">Python-Engine Sockets</span>
-        </div>
-      </div>
-
-      <div class="insp-content-card" id="card-P">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ P ] DEEP REINFORCEMENT LEARNING</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">REINFORCEMENT LEARNING & MULTI-AGENT SYSTEMS</div>
-        </div>
-        <div class="insp-heading">یادگیری تقویتی عمیق و چندعاملی (MARL)</div>
-        <p class="insp-details">فرمول‌بندی فرآیند تصمیم‌گیری مارکوف (MDP) و طراحی توابع پاداش چندمعیاره؛ آموزش مدل‌های تک‌عاملی (A2C با معماری MLP) و چندعاملی (PS-DGMARL-Lite با اشتراک پارامتر) با PyTorch، TensorFlow و Stable-Baselines3 در محیط‌های سفارشی Gymnasium.</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">Deep Reinforcement Learning (DRL)</span><span class="insp-chip">Stable-Baselines3 & Gymnasium</span><span class="insp-chip">PyTorch & TensorFlow</span><span class="insp-chip">A2C & PS-DGMARL-Lite</span><span class="insp-chip">Multi-Agent RL (MARL)</span>
-        </div>
-      </div>
-
-      <div class="insp-content-card" id="card-B">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ B ] DATA PIPELINES & ANALYTICS</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">DATA PIPELINES, ETL & APPLIED ANALYTICS</div>
-        </div>
-        <div class="insp-heading">مهندسی داده، پایپ‌لاین‌های ETL و تحلیل آماری</div>
-        <p class="insp-details">طراحی پایپ‌لاین‌های استخراج، پاک‌سازی (ETL) و نرمال‌سازی داده‌های حجیم شبیه‌سازی و سنسوری با Pandas و NumPy؛ تحلیل آماری شاخص‌های کلیدی عملکرد (KPIs)، ارزیابی پایداری مدل‌ها روی سیدهای تصادفی و رسم نمودارهای تحلیلی با Matplotlib.</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">Data Pipelines (ETL)</span><span class="insp-chip">Data Normalization & Scaling</span><span class="insp-chip">Exploratory Data Analysis (EDA)</span><span class="insp-chip">Pandas & NumPy</span><span class="insp-chip">KPI Analytics & Matplotlib</span>
-        </div>
-      </div>
-
-      <div class="insp-content-card" id="card-N">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ N ] NLP & TEXT PROCESSING</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">NATURAL LANGUAGE PROCESSING (NLP)</div>
-        </div>
-        <div class="insp-heading">پردازش زبان طبیعی و مهندسی متن</div>
-        <p class="insp-details">استخراج، تمیزکاری و نرمال‌سازی داده‌های متنی با اسکریپت‌های پایتون، پردازش عبارات منظم (Regex)، تحلیل ساختاریافته متون، آماده‌سازی پرامپت‌های مهندسی و ساخت دیتاست‌های زبانی برای مدل‌های هوش مصنوعی.</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">Natural Language Processing</span><span class="insp-chip">Text Mining & Regex</span><span class="insp-chip">String Normalization</span><span class="insp-chip">Topic & Text Parsing</span><span class="insp-chip">Dataset Preparation</span>
-        </div>
-      </div>
-
-      <div class="insp-content-card" id="card-A">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ A ] PURE PYTHON AUTOMATION</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">CUSTOM BACKEND AUTOMATION & SCRIPTING</div>
-        </div>
-        <div class="insp-heading">اتوماسیون خالص با پایتون و ربات‌های اختصاصی</div>
-        <p class="insp-details">توسعه اسکریپت‌های اتوماسیون مستقل بر بستر سرورهای لینوکسی (VPS)؛ وب‌اسکرپینگ داده‌ها با BeautifulSoup و Requests، زمان‌بندی تسک‌ها با Cron Jobs، ساخت ربات‌های مستقل تلگرام و اتصال مستقیم به وب‌سرویس‌ها بدون وابستگی به ابزارهای آماده.</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">Python Automation Scripts</span><span class="insp-chip">Linux VPS Deployment</span><span class="insp-chip">BeautifulSoup Scraping</span><span class="insp-chip">Cron Job Scheduling</span><span class="insp-chip">Telegram Bot API</span><span class="insp-chip">Headless Automation</span>
-        </div>
-      </div>
-
-      <div class="insp-content-card" id="card-8">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ 8 ] WORKFLOW ORCHESTRATION</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">BUSINESS PROCESS AUTOMATION (BPA) & LOW-CODE</div>
-        </div>
-        <div class="insp-heading">ارکستراسیون پیشرفته جریان‌های داده (n8n و Make)</div>
-        <p class="insp-details">ارکستراسیون فرآیندهای پیچیده سازمانی در n8n سلف‌هاست و پلتفرم Make.com؛ مدیریت وب‌هوک‌های بلادرنگ، ارسال درخواست‌های HTTP، ادغام نودهای هوش مصنوعی (AI Nodes)، و یکپارچه‌سازی پایگاه‌های داده و پلتفرم‌های ابری.</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">Self-Hosted n8n</span><span class="insp-chip">Make.com Scenarios</span><span class="insp-chip">AI Nodes Integration</span><span class="insp-chip">Webhook & HTTP Triggers</span><span class="insp-chip">Multi-Branch Data Routing</span><span class="insp-chip">SaaS Integrations</span>
-        </div>
-      </div>
-
-      <div class="insp-content-card" id="card-G">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ G ] AGENTIC AI & MCP PROTOCOL</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">AUTONOMOUS AGENTS & LLM ARCHITECTURE</div>
-        </div>
-        <div class="insp-heading">عامل‌های خودفرمان هوشمند و پروتکل MCP</div>
-        <p class="insp-details">توسعه ایجنت‌های هوشمند با قابلیت تصمیم‌گیری و برنامه‌ریزی مستقل، فراخوانی توابع و ابزارها (Tool Calling / Function Calling)، ادغام با پروتکل کانتکست مدل (MCP) و اتصال مستقیم API مدل‌های زبانی به سامانه‌های عملیاتی.</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">Agentic AI Systems</span><span class="insp-chip">Model Context Protocol (MCP)</span><span class="insp-chip">Tool Calling (Function Calling)</span><span class="insp-chip">Autonomous Task Execution</span><span class="insp-chip">LLM API Integration</span>
-        </div>
-      </div>
-
-      <div class="insp-content-card" id="card-R">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ R ] NEXT-GEN SEO: GEO / AEO / AIO</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">GENERATIVE ENGINE OPTIMIZATION (GEO) & CONTENT ENGINES</div>
-        </div>
-        <div class="insp-heading">سئو نوین هوش مصنوعی (GEO / AEO / AIO) و کارخانه محتوا</div>
-        <p class="insp-details">راه‌اندازی کارخانه تولید و بازنویسی خودکار مقالات بر پایه استانداردهای سئو نوین هوش مصنوعی (GEO/AEO/AIO) جهت دیده‌شدن در پاسخ‌های مستقیم موتورهای جستجوی هوشمند (مانند ChatGPT Search، Perplexity و Google AI Overviews) و انتشار مستقیم در وب‌سایت.</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">Generative Engine Optimization (GEO)</span><span class="insp-chip">Answer Engine Optimization (AEO)</span><span class="insp-chip">AI Optimization (AIO)</span><span class="insp-chip">AI Content Pipelines</span><span class="insp-chip">Automated Publishing</span>
-        </div>
-      </div>
-
-      <div class="insp-content-card" id="card-K">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ K ] VIBE CODING & RAPID DEV</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">AI-ASSISTED DEVELOPMENT & RAPID MVP</div>
-        </div>
-        <div class="insp-heading">وایب‌کدینگ (Vibe Coding) و توسعه سریع نرم‌افزار</div>
-        <p class="insp-details">توسعه فوق‌سریع و معماری نرم‌افزار با هدایت هوش مصنوعی و پرامپت‌نویسی پیشرفته در Cursor و Claude؛ تولید فوری نسخه‌های اولیه (MVP)، رفع خطاهای پیچیده و اجرای سیستم در محیط‌های ابری لینوکسی (GitHub Codespaces).</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">AI-Assisted Engineering</span><span class="insp-chip">Cursor & Claude Workflows</span><span class="insp-chip">GitHub Codespaces</span><span class="insp-chip">Rapid MVP Scaffolding</span><span class="insp-chip">Modular Dev</span>
-        </div>
-      </div>
-
-      <div class="insp-content-card" id="card-H">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ H ] IMAGE HASHING & VISION</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">IMAGE PROCESSING & VISION UTILITIES</div>
-        </div>
-        <div class="insp-heading">پردازش تصویر و الگوریتم‌های هش مدیا</div>
-        <p class="insp-details">توسعه ابزارهای پردازش دسته‌ای تصاویر با OpenCV و PIL؛ پیاده‌سازی الگوریتم‌های هش ادراکی (Image Hashing) جهت تشخیص تصاویر تکراری، سیستم‌های خودکار درج واترمارک و بهینه‌سازی انبوه فایل‌های مدیا.</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">Perceptual Image Hashing</span><span class="insp-chip">Duplicate Detection</span><span class="insp-chip">Watermarking Systems</span><span class="insp-chip">Batch Image Processing</span><span class="insp-chip">OpenCV & PIL</span>
-        </div>
-      </div>
-
-      <div class="insp-content-card" id="card-W">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ W ] WORDPRESS ARCHITECTURE</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">CMS ARCHITECTURE & WEB ENGINEERING</div>
-        </div>
-        <div class="insp-heading">توسعه وب، هسته وردپرس و دیتابیس</div>
-        <p class="insp-details">توسعه قالب‌های اختصاصی وردپرس، پیاده‌سازی هوک‌ها و فیلترهای هسته، ساختاردهی بهینه پایگاه داده MySQL، توسعه اندپوینت‌های سفارشی REST API و بهینه‌سازی ساختار سایت برای ترافیک بالا.</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">Custom Theme Development</span><span class="insp-chip">WordPress Core Hooks</span><span class="insp-chip">MySQL Database Design</span><span class="insp-chip">REST API Endpoints</span><span class="insp-chip">High-Performance CMS</span>
-        </div>
-      </div>
-
-      <div class="insp-content-card" id="card-E">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ E ] PHP BACKEND & PANELS</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">PHP BACKEND & SERVER-SIDE LOGIC</div>
-        </div>
-        <div class="insp-heading">برنامه‌نویسی بک‌اند PHP و داشبوردهای نظارتی</div>
-        <p class="insp-details">برنامه‌نویسی شیءگرا و ماژولار با PHP، ساخت داشبوردهای نظارتی و مدیریتی اختصاصی، نوشتن وب‌سرویس‌های امن، بهینه‌سازی کوئری‌های ارتباط با دیتابیس و مدیریت سیستم‌های احراز هویت.</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">PHP OOP Backend</span><span class="insp-chip">Admin & Monitoring Panels</span><span class="insp-chip">RESTful API Architecture</span><span class="insp-chip">MySQL Optimization</span><span class="insp-chip">Server-Side Logic</span>
-        </div>
-      </div>
-
-      <div class="insp-content-card" id="card-J">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ J ] JAVASCRIPT & DYNAMIC UI</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">FRONTEND LOGIC & INTERACTIVE UI</div>
-        </div>
-        <div class="insp-heading">جاوااسکریپت، وب تعاملی و انیمیشن Canvas</div>
-        <p class="insp-details">طراحی رابط‌های کاربری تعاملی و مدرن با Vanilla JS، رندر انیمیشن‌های سبک با HTML5 Canvas 2D، پردازش داده‌های ناهمگام (Async/Fetch) و کنترل داینامیک وضعیت سیستم در وب‌اپلیکیشن‌ها.</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">Modern JavaScript (ES6+)</span><span class="insp-chip">HTML5 Canvas 2D</span><span class="insp-chip">Interactive UI/UX</span><span class="insp-chip">Async & Fetch APIs</span><span class="insp-chip">Dynamic State Control</span>
-        </div>
-      </div>
-
-      <div class="insp-content-card" id="card-M">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ M ] CREATIVE MEDIA & BRANDING</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">CREATIVE MEDIA PRODUCTION, VIDEO & BRANDING</div>
-        </div>
-        <div class="insp-heading">پروداکشن مدیا، تدوین ویدیو و هویت بصری</div>
-        <p class="insp-details">مدیریت رسانه و هدایت کامل خط تولید محتوای ویدیویی و بصری (برند رادیوبنز)؛ تدوین پیشرفته ویدیو با Premiere Pro، ساخت موشن‌گرافیک و تیزر با After Effects، طراحی هویت بصری و کاورها با Photoshop و Illustrator، پردازش صوت و ویدیو با CapCut و FFmpeg.</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">Premiere Pro</span><span class="insp-chip">After Effects</span><span class="insp-chip">Photoshop & Illustrator</span><span class="insp-chip">CapCut & FFmpeg</span><span class="insp-chip">RadioBenz Media Lead</span><span class="insp-chip">Motion Design & VFX</span>
-        </div>
-      </div>
-
-      <div class="insp-content-card" id="card-SPACE">
-        <div class="insp-top">
-          <div class="insp-badge-key">[ SPACEBAR ] FULL-STACK AUTOMATION</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">SYSTEMS ENGINEERING & APPLIED AUTOMATION</div>
-        </div>
-        <div class="insp-heading">دیدگاه مهندسی: اتوماسیون کامل و حل مسائل پیچیده</div>
-        <p class="insp-details">اتصال دانش شبیه‌سازی دانشگاهی به اتوماسیون فرآیندها و ابزارهای سریع توسعه برای حل مسائل پیچیده، حذف کارهای تکراری و خلق سیستم‌های خودکار مقیاس‌پذیر.</p>
-        <div class="insp-chip-box">
-          <span class="insp-chip">Full-Stack Automation</span><span class="insp-chip">Engineering Problem Solving</span><span class="insp-chip">Rapid Prototyping</span><span class="insp-chip">Scalable Architecture</span><span class="insp-chip">Continuous Level-Up</span>
-        </div>
-      </div>
-
     </section>
   </main>
 
-  <!-- OBFUSCATED & ENCRYPTED RUNTIME PAYLOAD -->
   <script>
-    (function(_0x1b4c,_0x2e8f){const _0x59a1=function(_0x3c2d){while(--_0x3c2d){_0x1b4c['push'](_0x1b4c['shift']());}};_0x59a1(++_0x2e8f);}(['contextmenu','keydown','F12','ctrlKey','shiftKey','preventDefault','AudioContext','webkitAudioContext','suspended','resume','triangle','currentTime','setValueAtTime','exponentialRampToValueAtTime','connect','destination','start','stop','codeStreamCanvas','getContext','2d','innerWidth','innerHeight','width','height','clearRect','font','13px\x20\x27JetBrains\x20Mono\x27,\x20monospace','fillStyle','fillText','requestAnimationFrame','unlockTrigger','checked','liveClock','textContent','padStart','toUpperCase','key-'],0x1a4));const _0x3a12=function(_0x1b4c,_0x2e8f){_0x1b4c=_0x1b4c-0x0;const _0x59a1=['contextmenu','keydown','F12','ctrlKey','shiftKey','preventDefault','AudioContext','webkitAudioContext','suspended','resume','triangle','currentTime','setValueAtTime','exponentialRampToValueAtTime','connect','destination','start','stop','codeStreamCanvas','getContext','2d','innerWidth','innerHeight','width','height','clearRect','font','13px\x20\x27JetBrains\x20Mono\x27,\x20monospace','fillStyle','fillText','requestAnimationFrame','unlockTrigger','checked','liveClock','textContent','padStart','toUpperCase','key-'][_0x1b4c];return _0x59a1;};document['addEventListener'](_0x3a12(0x0),_0x4e=>_0x4e[_0x3a12(0x5)]());document['addEventListener'](_0x3a12(0x1),_0x2d=>{if(_0x2d['key']===_0x3a12(0x2)||(_0x2d[_0x3a12(0x3)]&&_0x2d[_0x3a12(0x4)]&&(_0x2d['key']==='I'||_0x2d['key']==='J'||_0x2d['key']==='C'))||(_0x2d[_0x3a12(0x3)]&&(_0x2d['key']==='u'||_0x2d['key']==='s'))){_0x2d[_0x3a12(0x5)]();return false;}});let _0x9c1a=null;function _0x4a9b(_0x5f2e,_0x3a1b=0x190){try{if(!_0x9c1a)_0x9c1a=new(window[_0x3a12(0x6)]||window[_0x3a12(0x7)])();if(_0x9c1a['state']===_0x3a12(0x8))_0x9c1a[_0x3a12(0x9)]();const _0x1d3f=_0x9c1a['createOscillator'](),_0x2a1b=_0x9c1a['createGain']();_0x1d3f['type']=_0x3a12(0xa);_0x1d3f['frequency'][_0x3a12(0xc)](_0x3a1b,_0x9c1a[_0x3a12(0xb)]);_0x1d3f['frequency'][_0x3a12(0xd)](0x46,_0x9c1a[_0x3a12(0xb)]+0.05);_0x2a1b['gain'][_0x3a12(0xc)](0.15,_0x9c1a[_0x3a12(0xb)]);_0x2a1b['gain'][_0x3a12(0xd)](0.001,_0x9c1a[_0x3a12(0xb)]+0.05);_0x1d3f[_0x3a12(0xe)](_0x2a1b);_0x2a1b[_0x3a12(0xe)](_0x9c1a[_0x3a12(0xf)]);_0x1d3f[_0x3a12(0x10)]();_0x1d3f[_0x3a12(0x11)](_0x9c1a[_0x3a12(0xb)]+0.05);}catch(_0xe){}}function triggerUnlockAudio(){_0x4a9b(' ',0x230);}const _0x5c1a=document['getElementById'](_0x3a12(0x12));if(_0x5c1a){const _0x2b3c=_0x5c1a[_0x3a12(0x13)](_0x3a12(0x14));let _0x4d1a=window[_0x3a12(0x15)]||0x4b0,_0x3f2a=window[_0x3a12(0x16)]||0x320;function _0x1a8f(){_0x4d1a=_0x5c1a[_0x3a12(0x17)]=window[_0x3a12(0x15)]||0x4b0;_0x3f2a=_0x5c1a[_0x3a12(0x18)]=window[_0x3a12(0x16)]||0x320;}window['addEventListener']('resize',_0x1a8f);_0x1a8f();const _0x3b4d=[{'text':'import\x20simpy,\x20torch,\x20sumolib,\x20traci','color':'#ff7b72'},{'text':'class\x20PS_DGMARL_Lite(torch.nn.Module):','color':'#ffa657'},{'text':'\x20\x20\x20\x20self.reward\x20=\x20-(0.6\x20*\x20delay\x20+\x200.4\x20*\x20queue)','color':'#79c0ff'},{'text':'\x20\x20\x20\x20def\x20step(self,\x20v2x_actions):','color':'#d2a8ff'},{'text':'const\x20n8n\x20=\x20new\x20WorkflowEngine({ai_nodes:\x20true});','color':'#00f2fe'},{'text':'const\x20mcp\x20=\x20new\x20ModelContextProtocol({tool_calling:\x20true});','color':'#d2a8ff'},{'text':'const\x20seo\x20=\x20new\x20EngineGEO({direct_indexing:\x20true});','color':'#00ff88'}];let _0x2d1b=_0x3b4d['map'](()=>Math['random']()*0x3e8);function _0x4e2b(){if(!_0x2b3c)return;_0x2b3c[_0x3a12(0x19)](0x0,0x0,_0x4d1a,_0x3f2a);_0x2b3c[_0x3a12(0x1a)]=_0x3a12(0x1b);const _0x1c4a=0x16,_0x2e3a=Math['ceil'](_0x3f2a/_0x1c4a)+0x2,_0x3d2a=0x118,_0x4a1b=Math['ceil'](_0x4d1a/_0x3d2a)+0x1;for(let _0x5a1a=0x0;_0x5a1a<_0x4a1b;_0x5a1a++){const _0x2f1b=_0x5a1a*_0x3d2a;for(let _0x1f2a=0x0;_0x1f2a<_0x2e3a;_0x1f2a++){const _0x3e2b=_0x3b4d[(_0x1f2a+_0x5a1a*0x3)%_0x3b4d['length']],_0x4b2c=_0x1f2a*_0x1c4a+0xc,_0x1a2b=_0x2f1b+Math['sin']((_0x2d1b[(_0x1f2a+_0x5a1a)%_0x2d1b['length']]+Date['now']()*0.0004))*0x6;_0x2b3c[_0x3a12(0x1c)]=_0x3e2b['color'];_0x2b3c[_0x3a12(0x1d)](_0x3e2b['text'],_0x1a2b,_0x4b2c);}}requestAnimationFrame(_0x4e2b);}_0x4e2b();}window['addEventListener'](_0x3a12(0x1),_0x5c=>{const _0x3b2a=document['getElementById'](_0x3a12(0x1f));if(!_0x3b2a[_0x3a12(0x20)]){if(_0x5c['key']==='Enter'){_0x3b2a[_0x3a12(0x20)]=true;triggerUnlockAudio();}return;}const _0x2c1a=_0x5c['key']==='\x20'?'SPACE':_0x5c['key'][_0x3a12(0x24)](),_0x1d4b=document['getElementById'](_0x3a12(0x25)+_0x2c1a);if(_0x1d4b){_0x1d4b[_0x3a12(0x20)]=true;_0x4a9b(_0x2c1a,0x1c2);}});setInterval(()=>{try{const _0x1b2c=new Date(),_0x3a4b=String(_0x1b2c['getHours']())[_0x3a12(0x23)](0x2,'0'),_0x4d2a=String(_0x1b2c['getMinutes']())[_0x3a12(0x23)](0x2,'0');document['getElementById'](_0x3a12(0x21))[_0x3a12(0x22)]=_0x3a4b+':'+_0x4d2a;}catch(_0x3e){}},0x3e8);
+    // ========================================================
+    // 1. LIVE TIME & PERSIAN DATE (Sync & Robust)
+    // ========================================================
+    function updateClockAndDate() {
+      try {
+        const now = new Date();
+        const hrs = String(now.getHours()).padStart(2, '0');
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        const clockEl = document.getElementById('liveClock');
+        if (clockEl) clockEl.textContent = hrs + ':' + mins;
+
+        const dateEl = document.getElementById('livePersianDate');
+        if (dateEl) {
+          try {
+            const persianFormatter = new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long'
+            });
+            dateEl.textContent = persianFormatter.format(now);
+          } catch(err) {
+            dateEl.textContent = "چهارشنبه، ۵ شهریور";
+          }
+        }
+      } catch(e) {}
+    }
+    updateClockAndDate();
+    setInterval(updateClockAndDate, 1000);
+
+    // ========================================================
+    // 2. DENSE CANVAS CODE STREAM (100% Guaranteed Render)
+    // ========================================================
+    const canvas = document.getElementById('codeStreamCanvas');
+    let ctx = null;
+    let width = 1200, height = 800;
+
+    if (canvas) {
+      ctx = canvas.getContext('2d');
+      function resizeCanvas() {
+        width = canvas.width = window.innerWidth || 1200;
+        height = canvas.height = window.innerHeight || 800;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      const denseCodeLibrary = [
+        { text: "import simpy, torch, sumolib, traci", color: "#ff7b72" },
+        { text: "class PS_DGMARL_Lite(torch.nn.Module):", color: "#ffa657" },
+        { text: "    def __init__(self, intersections=9):", color: "#e6edf3" },
+        { text: "        self.reward = -(0.6 * delay + 0.4 * queue)", color: "#79c0ff" },
+        { text: "    def step(self, v2x_actions):", color: "#d2a8ff" },
+        { text: "        return traci.simulationStep(), self.observe_cps()", color: "#7ee787" },
+        { text: "const n8n = new WorkflowEngine({ webhook: true, ai_nodes: true });", color: "#00f2fe" },
+        { text: "const mcp = new ModelContextProtocol({ tool_calling: true });", color: "#d2a8ff" },
+        { text: "const seo = new EngineGEO({ aeo: true, direct_indexing: true });", color: "#00ff88" },
+        { text: "ffmpeg.process(videoInput).pipe(radiobenzStream);", color: "#ff7b72" },
+        { text: "imageHash.phash(imageBuffer, { deduplication: true });", color: "#79c0ff" },
+        { text: "cursorVibe.scaffoldModularApp({ env: 'codespaces' });", color: "#7ee787" },
+        { text: "console.log('✔ All Industrial & AI Systems Online');", color: "#00ff88" }
+      ];
+
+      let rowOffsets = denseCodeLibrary.map(() => Math.random() * 1000);
+
+      function drawDenseCodeStream() {
+        if (!ctx) return;
+        ctx.clearRect(0, 0, width, height);
+        ctx.font = "13px 'JetBrains Mono', monospace";
+        const lineHeight = 20;
+        const numLines = Math.ceil(height / lineHeight) + 2;
+        const colWidth = 280;
+        const numCols = Math.ceil(width / colWidth) + 1;
+
+        for (let c = 0; c < numCols; c++) {
+          const startX = c * colWidth;
+          for (let i = 0; i < numLines; i++) {
+            const item = denseCodeLibrary[(i + c * 3) % denseCodeLibrary.length];
+            const y = i * lineHeight + 12;
+            const x = startX + Math.sin((rowOffsets[(i + c) % rowOffsets.length] + Date.now() * 0.0004)) * 6;
+            ctx.fillStyle = item.color;
+            ctx.fillText(item.text, x, y);
+          }
+        }
+        requestAnimationFrame(drawDenseCodeStream);
+      }
+      drawDenseCodeStream();
+    }
+
+    // ========================================================
+    // 3. SNAPPY iMESSAGE SEQUENCE (Typing Dots & Spotlight)
+    // ========================================================
+    let sequenceTimer = null;
+    function startiMessageSequence() {
+      if (sequenceTimer) clearTimeout(sequenceTimer);
+
+      const flow = document.getElementById('chatFlow');
+      const typing = document.getElementById('typingBubble');
+      const b1 = document.getElementById('msgBubble1');
+      const b2 = document.getElementById('msgBubble2');
+      const beam = document.getElementById('spotlightBeam');
+      const delivered = document.getElementById('deliveredTag');
+
+      if (!flow || !typing || !b1 || !b2) return;
+
+      // Reset
+      b1.classList.remove('active');
+      b2.classList.remove('active', 'bubble-spotlight-active');
+      if (beam) beam.classList.remove('active');
+      if (delivered) delivered.classList.remove('active');
+      typing.style.display = 'none';
+
+      // Step 1: Typing at top immediately (0ms)
+      flow.insertBefore(typing, b1);
+      typing.style.display = 'inline-flex';
+
+      // Step 2: Message 1 pops in (400ms)
+      setTimeout(() => {
+        typing.style.display = 'none';
+        b1.classList.add('active');
+      }, 400);
+
+      // Step 3: Typing moves below Message 1 (850ms)
+      setTimeout(() => {
+        flow.insertBefore(typing, b2);
+        typing.style.display = 'inline-flex';
+      }, 850);
+
+      // Step 4: Message 2 pops in (1450ms)
+      setTimeout(() => {
+        typing.style.display = 'none';
+        b2.classList.add('active');
+      }, 1450);
+
+      // Step 5: Spotlight Beam illuminates Message 2 (1700ms)
+      setTimeout(() => {
+        if (beam) beam.classList.add('active');
+        b2.classList.add('bubble-spotlight-active');
+        if (delivered) delivered.classList.add('active');
+      }, 1700);
+
+      // Repeat snappy loop
+      sequenceTimer = setTimeout(startiMessageSequence, 7500);
+    }
+    startiMessageSequence();
+
+    // ========================================================
+    // 4. UNIFIED CATEGORY REPOSITORY
+    // ========================================================
+    const skillsBase = {
+      'D': {
+        badge: '[ D ] DIGITAL TWIN & CPS',
+        cat: 'CYBER-PHYSICAL SYSTEMS & DIGITAL TWIN',
+        title: 'معماری دوقلوی دیجیتال و مدل‌سازی سایبر-فیزیکی',
+        desc: 'تسلط بر مدل ۵ سطحی بلوغ دوقلوی دیجیتال (پیاده‌سازی سطح ۳ پیش‌بین بر بستر مقالات کنفرانس ایتالیا و گرجستان)؛ یکپارچه‌سازی بلادرنگ داده‌های سنسوری با مدل مجازی و شبیه‌سازی سناریوهای پیش‌بینانه (What-If Analysis) جهت بهینه‌سازی سیستم‌های پیچیده صنعتی، معدنی و شهری.',
+        chips: ['5-Level DT Maturity Framework', 'Predictive Digital Twin (L3)', 'Cyber-Physical Systems (CPS)', 'Sensor Data Telemetry', 'What-If Scenario Simulation']
+      },
+      'V': {
+        badge: '[ V ] V2X PROTOCOLS & MOBILITY',
+        cat: 'INTELLIGENT TRANSPORTATION SYSTEMS (ITS) & V2X',
+        title: 'ارتباطات V2X و حمل‌ونقل هوشمند',
+        desc: 'طراحی و مدل‌سازی پروتکل‌های ارتباطی خودرویی V2X (شامل ارتباط خودرو به زیرساخت V2I، خودرو به خودرو V2V و شبکه V2N)؛ پیاده‌سازی راهنمایی سرعت پویا، سناریوهای پلاتونینگ (Platooning با تنظیم tau و minGap) و مدیریت جریان ناوگان متصل (CAVs).',
+        chips: ['V2X Protocols (V2V / V2I / V2N)', 'Connected Autonomous Vehicles (CAV)', 'Platooning Optimization', 'Speed Guidance Logic', 'Adaptive Signal Control']
+      },
+      'S': {
+        badge: '[ S ] MICROSCOPIC TRAFFIC SIMULATION',
+        cat: 'MICROSCOPIC TRAFFIC & NETWORK MODELING',
+        title: 'شبیه‌سازی میکروسکوپیک با SUMO',
+        desc: 'مدل‌سازی و شبیه‌سازی میکروسکوپیک جریان‌های ترافیکی در شبیه‌ساز Eclipse SUMO؛ پیکربندی فایل‌های شبکه net.xml با Netedit، تعریف سناریوهای تقاضای سفر rou.xml، مدل‌سازی شبکه‌های تقاطع تکی (1x1) و شبکه ۹ تقاطعی (3x3) و تولید داده‌های سنتتیک.',
+        chips: ['Eclipse SUMO', 'Netedit & XML Modeling', 'Microscopic Simulation', 'Grid Networks (1x1 & 3x3)', 'Synthetic Data Generation']
+      },
+      'T': {
+        badge: '[ T ] REAL-TIME CO-SIMULATION & TraCI',
+        cat: 'CLOSED-LOOP CO-SIMULATION & INTERFACING',
+        title: 'هم‌شبیه‌سازی و کنترل برخط با TraCI',
+        desc: 'ایجاد پل ارتباطی سوکت بی‌درنگ (Co-Simulation) میان اسکریپت‌های پایتون و موتور شبیه‌ساز با پروتکل TraCI؛ استخراج برخط بردارهای وضعیت (طول صف، تاخیر و سرعت) و اعمال فرامین کنترلی دینامیک در حلقه‌های کنترلی بسته (Closed-Loop Control).',
+        chips: ['TraCI Protocol', 'Real-Time Co-Simulation', 'Closed-Loop System Control', 'State Extraction & Observation', 'Python-Engine Sockets']
+      },
+      'P': {
+        badge: '[ P ] DEEP REINFORCEMENT LEARNING',
+        cat: 'REINFORCEMENT LEARNING & MULTI-AGENT SYSTEMS',
+        title: 'یادگیری تقویتی عمیق و چندعاملی (MARL)',
+        desc: 'فرمول‌بندی فرآیند تصمیم‌گیری مارکوف (MDP) و طراحی توابع پاداش چندمعیاره؛ آموزش مدل‌های تک‌عاملی (A2C با معماری MLP) و چندعاملی (PS-DGMARL-Lite با اشتراک پارامتر) با PyTorch، TensorFlow و Stable-Baselines3 در محیط‌های سفارشی Gymnasium.',
+        chips: ['Deep Reinforcement Learning (DRL)', 'Stable-Baselines3 & Gymnasium', 'PyTorch & TensorFlow', 'A2C & PS-DGMARL-Lite', 'Multi-Agent RL (MARL)']
+      },
+      'B': {
+        badge: '[ B ] DATA PIPELINES & ANALYTICS',
+        cat: 'DATA PIPELINES, ETL & APPLIED ANALYTICS',
+        title: 'مهندسی داده، پایپ‌لاین‌های ETL و تحلیل آماری',
+        desc: 'طراحی پایپ‌لاین‌های استخراج، پاک‌سازی (ETL) و نرمال‌سازی داده‌های حجیم شبیه‌سازی و سنسوری با Pandas و NumPy؛ تحلیل آماری شاخص‌های کلیدی عملکرد (KPIs)، ارزیابی پایداری مدل‌ها روی سیدهای تصادفی و رسم نمودارهای تحلیلی با Matplotlib.',
+        chips: ['Data Pipelines (ETL)', 'Data Normalization & Scaling', 'Exploratory Data Analysis (EDA)', 'Pandas & NumPy', 'KPI Analytics & Matplotlib']
+      },
+      'N': {
+        badge: '[ N ] NLP & TEXT PROCESSING',
+        cat: 'NATURAL LANGUAGE PROCESSING (NLP)',
+        title: 'پردازش زبان طبیعی و مهندسی متن',
+        desc: 'استخراج، تمیزکاری و نرمال‌سازی داده‌های متنی با اسکریپت‌های پایتون، پردازش عبارات منظم (Regex)، تحلیل ساختاریافته متون، آماده‌سازی پرامپت‌های مهندسی و ساخت دیتاست‌های زبانی برای مدل‌های هوش مصنوعی.',
+        chips: ['Natural Language Processing', 'Text Mining & Regex', 'String Normalization', 'Topic & Text Parsing', 'Dataset Preparation']
+      },
+      'A': {
+        badge: '[ A ] PURE PYTHON AUTOMATION',
+        cat: 'CUSTOM BACKEND AUTOMATION & SCRIPTING',
+        title: 'اتوماسیون خالص با پایتون و ربات‌های اختصاصی',
+        desc: 'توسعه اسکریپت‌های اتوماسیون مستقل بر بستر سرورهای لینوکسی (VPS)؛ وب‌اسکرپینگ داده‌ها با BeautifulSoup و Requests، زمان‌بندی تسک‌ها با Cron Jobs، ساخت ربات‌های مستقل تلگرام و اتصال مستقیم به وب‌سرویس‌ها بدون وابستگی به ابزارهای آماده.',
+        chips: ['Python Automation Scripts', 'Linux VPS Deployment', 'BeautifulSoup Scraping', 'Cron Job Scheduling', 'Telegram Bot API', 'Headless Automation']
+      },
+      '8': {
+        badge: '[ 8 ] WORKFLOW ORCHESTRATION',
+        cat: 'BUSINESS PROCESS AUTOMATION (BPA) & LOW-CODE',
+        title: 'ارکستراسیون پیشرفته جریان‌های داده (n8n و Make)',
+        desc: 'ارکستراسیون فرآیندهای پیچیده سازمانی در n8n سلف‌هاست و پلتفرم Make.com؛ مدیریت وب‌هوک‌های بلادرنگ، ارسال درخواست‌های HTTP، ادغام نودهای هوش مصنوعی (AI Nodes)، و یکپارچه‌سازی پایگاه‌های داده و پلتفرم‌های ابری.',
+        chips: ['Self-Hosted n8n', 'Make.com Scenarios', 'AI Nodes Integration', 'Webhook & HTTP Triggers', 'Multi-Branch Data Routing', 'SaaS Integrations']
+      },
+      'G': {
+        badge: '[ G ] AGENTIC AI & MCP PROTOCOL',
+        cat: 'AUTONOMOUS AGENTS & LLM ARCHITECTURE',
+        title: 'عامل‌های خودفرمان هوشمند و پروتکل MCP',
+        desc: 'توسعه ایجنت‌های هوشمند با قابلیت تصمیم‌گیری و برنامه‌ریزی مستقل، فراخوانی توابع و ابزارها (Tool Calling / Function Calling)، ادغام با پروتکل کانتکست مدل (MCP) و اتصال مستقیم API مدل‌های زبانی به سامانه‌های عملیاتی.',
+        chips: ['Agentic AI Systems', 'Model Context Protocol (MCP)', 'Tool Calling (Function Calling)', 'Autonomous Task Execution', 'LLM API Integration']
+      },
+      'R': {
+        badge: '[ R ] NEXT-GEN SEO: GEO / AEO / AIO',
+        cat: 'GENERATIVE ENGINE OPTIMIZATION (GEO) & CONTENT ENGINES',
+        title: 'سئو نوین هوش مصنوعی (GEO / AEO / AIO) و کارخانه محتوا',
+        desc: 'راه‌اندازی کارخانه تولید و بازنویسی خودکار مقالات بر پایه استانداردهای سئو نوین هوش مصنوعی (GEO/AEO/AIO) جهت دیده‌شدن در پاسخ‌های مستقیم موتورهای جستجوی هوشمند (مانند ChatGPT Search، Perplexity و Google AI Overviews) و انتشار مستقیم در وب‌سایت.',
+        chips: ['Generative Engine Optimization (GEO)', 'Answer Engine Optimization (AEO)', 'AI Optimization (AIO)', 'AI Content Pipelines', 'Automated Publishing']
+      },
+      'K': {
+        badge: '[ K ] VIBE CODING & RAPID DEV',
+        cat: 'AI-ASSISTED DEVELOPMENT & RAPID MVP',
+        title: 'وایب‌کدینگ (Vibe Coding) و توسعه سریع نرم‌افزار',
+        desc: 'توسعه فوق‌سریع و معماری نرم‌افزار با هدایت هوش مصنوعی و پرامپت‌نویسی پیشرفته در Cursor و Claude؛ تولید فوری نسخه‌های اولیه (MVP)، رفع خطاهای پیچیده و اجرای سیستم در محیط‌های ابری لینوکسی (GitHub Codespaces).',
+        chips: ['AI-Assisted Engineering', 'Cursor & Claude Workflows', 'GitHub Codespaces', 'Rapid MVP Scaffolding', 'Modular Dev']
+      },
+      'H': {
+        badge: '[ H ] IMAGE HASHING & VISION',
+        cat: 'IMAGE PROCESSING & VISION UTILITIES',
+        title: 'پردازش تصویر و الگوریتم‌های هش مدیا',
+        desc: 'توسعه ابزارهای پردازش دسته‌ای تصاویر با OpenCV و PIL؛ پیاده‌سازی الگوریتم‌های هش ادراکی (Image Hashing) جهت تشخیص تصاویر تکراری، سیستم‌های خودکار درج واترمارک و بهینه‌سازی انبوه فایل‌های مدیا.',
+        chips: ['Perceptual Image Hashing', 'Duplicate Detection', 'Watermarking Systems', 'Batch Image Processing', 'OpenCV & PIL']
+      },
+      'W': {
+        badge: '[ W ] WORDPRESS ARCHITECTURE',
+        cat: 'CMS ARCHITECTURE & WEB ENGINEERING',
+        title: 'توسعه وب، هسته وردپرس و دیتابیس',
+        desc: 'توسعه قالب‌های اختصاصی وردپرس، پیاده‌سازی هوک‌ها و فیلترهای هسته، ساختاردهی بهینه پایگاه داده MySQL، توسعه اندپوینت‌های سفارشی REST API و بهینه‌سازی ساختار سایت برای ترافیک بالا.',
+        chips: ['Custom Theme Development', 'WordPress Core Hooks', 'MySQL Database Design', 'REST API Endpoints', 'High-Performance CMS']
+      },
+      'E': {
+        badge: '[ E ] PHP BACKEND & PANELS',
+        cat: 'PHP BACKEND & SERVER-SIDE LOGIC',
+        title: 'برنامه‌نویسی بک‌اند PHP و داشبوردهای نظارتی',
+        desc: 'برنامه‌نویسی شیءگرا و ماژولار با PHP، ساخت داشبوردهای نظارتی و مدیریتی اختصاصی، نوشتن وب‌سرویس‌های امن، بهینه‌سازی کوئری‌های ارتباط با دیتابیس و مدیریت سیستم‌های احراز هویت.',
+        chips: ['PHP OOP Backend', 'Admin & Monitoring Panels', 'RESTful API Architecture', 'MySQL Optimization', 'Server-Side Logic']
+      },
+      'J': {
+        badge: '[ J ] JAVASCRIPT & DYNAMIC UI',
+        cat: 'FRONTEND LOGIC & INTERACTIVE UI',
+        title: 'جاوااسکریپت، وب تعاملی و انیمیشن Canvas',
+        desc: 'طراحی رابط‌های کاربری تعاملی و مدرن با Vanilla JS، رندر انیمیشن‌های سبک با HTML5 Canvas 2D، پردازش داده‌های ناهمگام (Async/Fetch) و کنترل داینامیک وضعیت سیستم در وب‌اپلیکیشن‌ها.',
+        chips: ['Modern JavaScript (ES6+)', 'HTML5 Canvas 2D', 'Interactive UI/UX', 'Async & Fetch APIs', 'Dynamic State Control']
+      },
+      'M': {
+        badge: '[ M ] CREATIVE MEDIA & BRANDING',
+        cat: 'CREATIVE MEDIA PRODUCTION, VIDEO & BRANDING',
+        title: 'پروداکشن مدیا، تدوین ویدیو و هویت بصری',
+        desc: 'مدیریت رسانه و هدایت کامل خط تولید محتوای ویدیویی و بصری (برند رادیوبنز)؛ تدوین پیشرفته ویدیو با Premiere Pro، ساخت موشن‌گرافیک و تیزر با After Effects، طراحی هویت بصری و کاورها با Photoshop و Illustrator، پردازش صوت و ویدیو با CapCut و FFmpeg.',
+        chips: ['Premiere Pro', 'After Effects', 'Photoshop & Illustrator', 'CapCut & FFmpeg', 'RadioBenz Media Lead', 'Motion Design & VFX']
+      },
+      ' ': {
+        badge: '[ SPACEBAR ] FULL-STACK AUTOMATION',
+        cat: 'SYSTEMS ENGINEERING & APPLIED AUTOMATION',
+        title: 'دیدگاه مهندسی: اتوماسیون کامل و حل مسائل پیچیده',
+        desc: 'اتصال دانش شبیه‌سازی دانشگاهی به اتوماسیون فرآیندها و ابزارهای سریع توسعه برای حل مسائل پیچیده، حذف کارهای تکراری و خلق سیستم‌های خودکار مقیاس‌پذیر.',
+        chips: ['Full-Stack Automation', 'Engineering Problem Solving', 'Rapid Prototyping', 'Scalable Architecture', 'Continuous Level-Up']
+      }
+    };
+
+    // ========================================================
+    // 5. MECHANICAL AUDIO SYNTHESIZER (Web Audio API)
+    // ========================================================
+    let audioCtx = null;
+    function playTactileClick(freq = 400) {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(70, audioCtx.currentTime + 0.05);
+
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+      } catch(e) {}
+    }
+
+    // ========================================================
+    // 6. INTERACTIVE ACTIONS
+    // ========================================================
+    function triggerKey(keyChar) {
+      const char = keyChar.toUpperCase();
+      const data = skillsBase[char] || skillsBase[' '];
+
+      playTactileClick(char === ' ' ? 240 : 380 + char.charCodeAt(0) * 3);
+
+      document.querySelectorAll('.mac-key').forEach(k => k.classList.remove('active-key', 'pressed'));
+      const target = document.querySelector(`.mac-key[data-key="${char}"]`) || document.querySelector(`.mac-key[data-key=" "]`);
+      if (target) {
+        target.classList.add('pressed', 'active-key');
+        setTimeout(() => target.classList.remove('pressed'), 100);
+      }
+
+      const inspector = document.getElementById('inspectorPanel');
+      if (inspector) {
+        inspector.style.opacity = '0.5';
+        inspector.style.transform = 'translateY(4px)';
+
+        setTimeout(() => {
+          document.getElementById('inspBadge').textContent = data.badge;
+          document.getElementById('inspCategory').textContent = data.cat;
+          document.getElementById('inspTitle').textContent = data.title;
+          document.getElementById('inspDesc').textContent = data.desc;
+
+          const chipContainer = document.getElementById('inspChipBox');
+          chipContainer.innerHTML = '';
+          data.chips.forEach(c => {
+            const span = document.createElement('span');
+            span.className = 'insp-chip';
+            span.textContent = c;
+            chipContainer.appendChild(span);
+          });
+
+          inspector.style.opacity = '1';
+          inspector.style.transform = 'translateY(0)';
+        }, 70);
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      const lock = document.getElementById('macLockScreen');
+      if (lock && lock.style.display !== 'none') {
+        if (e.key === 'Enter') handleUnlock(e);
+        return;
+      }
+      const k = e.key === ' ' ? ' ' : e.key.toUpperCase();
+      if (skillsBase[k]) triggerKey(k);
+    });
+
+    // ========================================================
+    // 7. UNLOCK HANDLER
+    // ========================================================
+    function handleUnlock(e) {
+      if (e) e.preventDefault();
+      playTactileClick(560);
+      const lock = document.getElementById('macLockScreen');
+      const desktop = document.getElementById('desktopApp');
+
+      if (lock && desktop) {
+        lock.style.opacity = '0';
+        setTimeout(() => {
+          lock.style.display = 'none';
+          desktop.style.display = 'flex';
+          setTimeout(() => {
+            desktop.style.opacity = '1';
+            desktop.style.transform = 'translateY(0)';
+            triggerKey('D');
+          }, 50);
+        }, 400);
+      }
+    }
   </script>
 </body>
 </html>
