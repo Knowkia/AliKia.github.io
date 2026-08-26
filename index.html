@@ -45,7 +45,7 @@
     }
 
     /* ========================================================
-       1. LOCK SCREEN & iMESSAGE SPOTLIGHT EFFECT
+       1. LOCK SCREEN, TYPING DOTS & SPOTLIGHT BEAM
        ======================================================== */
     #macLockScreen {
       position: fixed;
@@ -103,7 +103,7 @@
       direction: ltr;
     }
 
-    /* iMessage Spatial Card */
+    /* iMessage iOS Card */
     .imessage-container-card {
       width: 100%;
       max-width: 440px;
@@ -182,11 +182,11 @@
       z-index: 3;
     }
     .imessage-bubble.active {
-      display: block;
-      transform: scale(1) translateY(0);
+      display: block !important;
+      transform: scale(1) translateY(0) !important;
     }
 
-    /* Animated 3 Bouncing Dots Indicator */
+    /* 3 Bouncing Dots Indicator */
     .imessage-typing-bubble {
       align-self: flex-start;
       padding: 8px 14px;
@@ -215,7 +215,7 @@
       40% { transform: translateY(-5px); opacity: 1; }
     }
 
-    /* High-Voltage Spotlight Beam */
+    /* High-Impact Spotlight Beam */
     .spotlight-beam-overlay {
       position: absolute;
       top: -30px;
@@ -230,7 +230,7 @@
       filter: blur(10px);
       z-index: 1;
     }
-    .spotlight-beam-overlay.active { opacity: 1; }
+    .spotlight-beam-overlay.active { opacity: 1 !important; }
 
     .bubble-spotlight-active {
       box-shadow: 0 0 35px rgba(255, 255, 255, 0.8), 0 0 55px rgba(0, 122, 255, 0.9) !important;
@@ -247,7 +247,7 @@
       transition: opacity 0.3s ease;
       z-index: 3;
     }
-    .delivered-receipt.active { display: block; }
+    .delivered-receipt.active { display: block !important; }
 
     .lock-bottom-login {
       position: relative;
@@ -592,9 +592,8 @@
         <div class="lock-clock-huge" id="liveClock">14:08</div>
       </div>
 
-      <!-- Foreground iMessage Card with High-Impact Spotlight Effect -->
+      <!-- Foreground iMessage Card -->
       <div class="imessage-container-card">
-        <!-- Radial Spotlight Beam -->
         <div class="spotlight-beam-overlay" id="spotlightBeam"></div>
 
         <div class="imessage-ios-header">
@@ -790,7 +789,7 @@
 
   <script>
     // ========================================================
-    // 1. LIVE TIME & PERSIAN DATE (Sync & Robust)
+    // 1. LIVE TIME & PERSIAN DATE
     // ========================================================
     function updateClockAndDate() {
       try {
@@ -819,7 +818,7 @@
     setInterval(updateClockAndDate, 1000);
 
     // ========================================================
-    // 2. DENSE CANVAS CODE STREAM (100% Guaranteed Render)
+    // 2. DENSE CANVAS CODE STREAM
     // ========================================================
     const canvas = document.getElementById('codeStreamCanvas');
     let ctx = null;
@@ -877,7 +876,7 @@
     }
 
     // ========================================================
-    // 3. SNAPPY iMESSAGE SEQUENCE (Typing Dots & Spotlight)
+    // 3. LIVE iMESSAGE TYPING & SPOTLIGHT SEQUENCE
     // ========================================================
     let sequenceTimer = null;
     function startiMessageSequence() {
@@ -899,36 +898,36 @@
       if (delivered) delivered.classList.remove('active');
       typing.style.display = 'none';
 
-      // Step 1: Typing at top immediately (0ms)
+      // 1. Typing starts at top
       flow.insertBefore(typing, b1);
       typing.style.display = 'inline-flex';
 
-      // Step 2: Message 1 pops in (400ms)
+      // 2. Bubble 1 pops in (400ms)
       setTimeout(() => {
         typing.style.display = 'none';
         b1.classList.add('active');
       }, 400);
 
-      // Step 3: Typing moves below Message 1 (850ms)
+      // 3. Typing moves below Bubble 1 (850ms)
       setTimeout(() => {
         flow.insertBefore(typing, b2);
         typing.style.display = 'inline-flex';
       }, 850);
 
-      // Step 4: Message 2 pops in (1450ms)
+      // 4. Bubble 2 pops in (1450ms)
       setTimeout(() => {
         typing.style.display = 'none';
         b2.classList.add('active');
       }, 1450);
 
-      // Step 5: Spotlight Beam illuminates Message 2 (1700ms)
+      // 5. Spotlight illuminates Bubble 2 (1700ms)
       setTimeout(() => {
         if (beam) beam.classList.add('active');
         b2.classList.add('bubble-spotlight-active');
         if (delivered) delivered.classList.add('active');
       }, 1700);
 
-      // Repeat snappy loop
+      // Snappy repeat loop
       sequenceTimer = setTimeout(startiMessageSequence, 7500);
     }
     startiMessageSequence();
