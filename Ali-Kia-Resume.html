@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+  <meta name="googlebot" content="noindex, nofollow" />
+
+  <title>Engineering Workspace // Ali Kia</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Outfit:wght@700;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --mac-silver: #1e222d;
+      --mac-body: linear-gradient(180deg, #181b24 0%, #0f1118 100%);
+      --mac-well: #090a0f;
+      --key-surface: linear-gradient(180deg, #222634 0%, #151822 100%);
+      --key-border: rgba(255, 255, 255, 0.12);
+      --cyan-glow: #00f2fe;
+      --imessage-blue: #007aff;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Vazirmatn", -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #020408;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    /* ========================================================
+       1. LOCK SCREEN & PURE CSS iMESSAGE ANIMATIONS
+       ======================================================== */
+    #macLockScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      padding: 24px 20px;
+      transition: opacity 0.6s ease, visibility 0.6s;
+      background: radial-gradient(circle at 50% 30%, #0a1124 0%, #020408 85%);
+      overflow: hidden;
+    }
+
+    #codeStreamCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .lock-content-layer {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .lock-time-box { text-align: center; margin-bottom: 6px; }
+    .lock-persian-date {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.95);
+      margin-bottom: 0px;
+      text-shadow: 0 2px 15px rgba(0, 0, 0, 0.9);
+    }
+    
+    .lock-clock-huge {
+      font-size: clamp(3.6rem, 8vw, 5.8rem);
+      font-weight: 700;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif !important;
+      line-height: 1;
+      color: #ffffff;
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 255, 255, 0.2);
+      letter-spacing: -3px;
+      direction: ltr;
+    }
+
+    .imessage-container-card {
+      width: 100%;
+      max-width: 440px;
+      background: rgba(16, 20, 32, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 26px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(0, 122, 255, 0.25);
+      -webkit-backdrop-filter: blur(40px);
+      backdrop-filter: blur(40px);
+      padding: 14px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .imessage-ios-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+    }
+    .imessage-contact-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2c3e50, #000000);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.6rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      margin-bottom: 4px;
+    }
+    .imessage-contact-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .imessage-contact-name span { color: #8e8e93; font-size: 0.8rem; }
+
+    .imessage-chat-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 12px 0 4px;
+      min-height: 115px;
+      justify-content: flex-start;
+      position: relative;
+    }
+
+    /* PURE CSS ANIMATIONS (Always Works!) */
+    .imessage-bubble {
+      align-self: flex-start;
+      width: fit-content;
+      max-width: 90%;
+      padding: 9px 18px;
+      border-radius: 18px 18px 18px 4px;
+      background: var(--imessage-blue);
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      line-height: 1.5;
+      box-shadow: 0 6px 18px rgba(0, 122, 255, 0.35);
+      opacity: 0;
+      transform: translateY(10px) scale(0.9);
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    #msgBubble1 { animation-delay: 0.3s; }
+    #msgBubble2 { 
+      animation-delay: 1.2s; 
+      box-shadow: 0 0 35px rgba(255, 255, 255, 0.7), 0 0 45px rgba(0, 122, 255, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+    }
+
+    .delivered-receipt {
+      font-size: 0.68rem;
+      color: rgba(255, 255, 255, 0.5);
+      align-self: flex-start;
+      margin-top: -4px;
+      margin-right: 4px;
+      opacity: 0;
+      animation: fadeIn 0.4s ease 1.5s forwards;
+    }
+
+    @keyframes popIn {
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Spotlight Glow */
+    .spotlight-beam-overlay {
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 380px;
+      height: 290px;
+      background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.38) 0%, rgba(0, 122, 255, 0.25) 40%, transparent 75%);
+      opacity: 0;
+      pointer-events: none;
+      animation: fadeIn 0.8s ease 1.3s forwards;
+      filter: blur(8px);
+    }
+
+    .lock-bottom-login {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 320px;
+      margin-top: 4px;
+    }
+    .lock-avatar-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1.5px solid rgba(255, 255, 255, 0.6);
+      -webkit-backdrop-filter: blur(25px);
+      backdrop-filter: blur(25px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: #ffffff;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.25);
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    .lock-input-pill {
+      width: 100%;
+      background: rgba(12, 16, 26, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 999px;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      -webkit-backdrop-filter: blur(30px);
+      backdrop-filter: blur(30px);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.7);
+      cursor: pointer;
+    }
+    .lock-password-field {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 0.9rem;
+      flex: 1;
+      text-align: center;
+      font-family: "Vazirmatn", sans-serif;
+    }
+    .lock-password-field::placeholder { color: rgba(255, 255, 255, 0.6); font-size: 0.8rem; }
+    .lock-submit-arrow {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.85);
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 0 4px;
+    }
+    .lock-touch-id-text {
+      font-size: 0.74rem;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    /* ========================================================
+       2. WORKSPACE
+       ======================================================== */
+    #desktopApp {
+      display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+      width: 100%;
+      max-width: 1280px;
+      padding: 24px 16px 60px;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .hero-bio-strip { text-align: center; max-width: 880px; }
+    .hero-bio-strip h1 {
+      font-size: clamp(1.6rem, 3.8vw, 2.3rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, #fff 40%, var(--cyan-glow) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .hero-bio-strip p { font-size: 0.94rem; color: var(--text-muted); line-height: 1.8; }
+    .hero-bio-strip p strong { color: #fff; }
+
+    .keyboard-instruction-banner {
+      width: 100%;
+      max-width: 1040px;
+      background: rgba(0, 242, 254, 0.08);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      border-radius: 14px;
+      padding: 10px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 0 30px rgba(0, 242, 254, 0.08);
+    }
+    .banner-title { font-size: 0.86rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .banner-badge {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.72rem;
+      font-weight: 800;
+      background: var(--cyan-glow);
+      color: #000;
+      padding: 3px 10px;
+      border-radius: 8px;
+    }
+
+    .macbook-chassis {
+      width: 100%;
+      max-width: 1040px;
+      background: var(--mac-body);
+      border: 2px solid #2a3142;
+      border-radius: 28px;
+      padding: 22px 20px 18px;
+      box-shadow: 0 45px 90px rgba(0, 0, 0, 0.85), 0 0 40px rgba(0, 242, 254, 0.04), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .macbook-keyboard-bed {
+      width: 100%;
+      background: var(--mac-well);
+      border-radius: 16px;
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      box-shadow: inset 0 6px 18px rgba(0, 0, 0, 0.95);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      direction: ltr;
+    }
+
+    .mac-row { display: flex; gap: 6px; justify-content: center; width: 100%; }
+    .mac-key {
+      position: relative;
+      height: 54px;
+      flex: 1;
+      background: var(--key-surface);
+      border-radius: 7px;
+      border: 1px solid var(--key-border);
+      box-shadow: 0 5px 0 #07080d, 0 7px 10px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.25);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 4px 6px;
+      transition: all 0.08s cubic-bezier(0.2, 0.8, 0.4, 1);
+    }
+    .mac-key:hover {
+      background: linear-gradient(180deg, #2c3245 0%, #1a1e2b 100%);
+      border-color: rgba(255, 255, 255, 0.35);
+      box-shadow: 0 5px 0 #07080d, 0 0 15px rgba(255,255,255,0.15);
+    }
+    .mac-key.pressed, .mac-key:active {
+      transform: translateY(5px);
+      box-shadow: 0 0 0 #07080d, inset 0 2px 4px rgba(0,0,0,0.6) !important;
+      background: #11131a;
+    }
+    .mac-key.active-key {
+      border-color: var(--cyan-glow);
+      box-shadow: 0 5px 0 #07080d, 0 0 20px rgba(0, 242, 254, 0.4);
+    }
+
+    .key-top-meta { display: flex; justify-content: space-between; align-items: center; }
+    .key-char { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; font-size: 0.95rem; font-weight: 800; color: #ffffff; }
+    .key-symbol-badge { font-size: 0.75rem; opacity: 0.85; }
+    .key-full-name {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.54rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.7);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: right;
+    }
+
+    .key-space-bar { flex: 1; max-width: 100%; display: flex; justify-content: center; align-items: center; }
+    .space-center-text {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: #00ff88;
+      letter-spacing: 1.2px;
+    }
+
+    .macbook-bottom-deck {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      margin-top: 14px;
+      gap: 12px;
+      direction: ltr;
+    }
+
+    .mac-trackpad-glass {
+      width: 220px;
+      height: 110px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
+    }
+
+    .palm-stickers-cluster { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 0 6px; }
+    .palm-left { justify-content: flex-end; }
+    .palm-right { justify-content: flex-start; }
+
+    .vinyl-sticker {
+      padding: 4px 9px;
+      border-radius: 7px;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.68rem;
+      font-weight: 800;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.4);
+      border: 1.5px solid rgba(255,255,255,0.85);
+      cursor: pointer;
+    }
+    .stk-vibe { background: linear-gradient(135deg, #ff007f, #7928ca); }
+    .stk-pytorch { background: linear-gradient(135deg, #ee4c2c, #f39c12); }
+    .stk-bigdata { background: linear-gradient(135deg, #00b4d8, #0077b6); }
+    .stk-n8n { background: linear-gradient(135deg, #ea2b5b, #ff6d5a); }
+    .stk-twin { background: linear-gradient(135deg, #00f2fe, #4facfe); color:#000; }
+    .stk-media { background: linear-gradient(135deg, #9b51e0, #e91e63); }
+
+    .live-inspector-tray {
+      width: 100%;
+      max-width: 1040px;
+      background: rgba(15, 18, 26, 0.75);
+      border: 1px solid var(--glass-border);
+      border-radius: 22px;
+      padding: 22px 26px;
+      -webkit-backdrop-filter: blur(30px);
+      backdrop-filter: blur(30px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      transition: all 0.3s ease;
+    }
+    .insp-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .insp-badge-key {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: var(--cyan-glow);
+      background: rgba(0, 242, 254, 0.08);
+      border: 1px solid rgba(0, 242, 254, 0.25);
+      padding: 4px 12px;
+      border-radius: 9px;
+    }
+    .insp-heading { font-size: 1.25rem; font-weight: 800; color: #fff; margin-bottom: 6px; }
+    .insp-details { font-size: 0.92rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 14px; }
+    .insp-chip-box { display: flex; flex-wrap: wrap; gap: 7px; }
+    .insp-chip {
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 4px 11px;
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .macbook-chassis { padding: 12px 8px; border-radius: 18px; }
+      .macbook-keyboard-bed { padding: 6px; gap: 4px; border-radius: 12px; }
+      .mac-row { gap: 4px; }
+      .mac-key { height: 46px; padding: 3px 4px; border-radius: 5px; }
+      .key-char { font-size: 0.82rem; }
+      .key-symbol-badge { font-size: 0.65rem; }
+      .key-full-name { font-size: 0.48rem; }
+      .macbook-bottom-deck { grid-template-columns: 1fr auto 1fr; gap: 6px; margin-top: 10px; }
+      .mac-trackpad-glass { width: 95px; height: 60px; border-radius: 8px; }
+      .palm-stickers-cluster { gap: 4px; padding: 0 2px; }
+      .vinyl-sticker { font-size: 0.55rem; padding: 2px 5px; border-radius: 5px; }
+      .space-center-text { font-size: 0.55rem; letter-spacing: 0.5px; }
+      .live-inspector-tray { padding: 16px 16px; border-radius: 16px; }
+      .insp-heading { font-size: 1.1rem; }
+      .insp-details { font-size: 0.85rem; line-height: 1.7; }
+    }
+
+    @media (max-width: 480px) {
+      .key-full-name { display: none; }
+      .mac-trackpad-glass { width: 75px; height: 48px; }
+      .vinyl-sticker { font-size: 0.5rem; padding: 2px 4px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================================
+       1. LOCK SCREEN
+       ======================================================== -->
+  <div id="macLockScreen">
+    <canvas id="codeStreamCanvas"></canvas>
+
+    <div class="lock-content-layer">
+      <div class="lock-time-box">
+        <div class="lock-persian-date" id="livePersianDate">چهارشنبه، ۵ شهریور</div>
+        <div class="lock-clock-huge" id="liveClock">14:08</div>
+      </div>
+
+      <div class="imessage-container-card">
+        <div class="spotlight-beam-overlay" id="spotlightBeam"></div>
+
+        <div class="imessage-ios-header">
+          <div class="imessage-contact-avatar">👨‍💻</div>
+          <div class="imessage-contact-name">
+            علی کیا <span>›</span>
+          </div>
+        </div>
+
+        <div class="imessage-chat-flow" id="chatFlow">
+          <div class="imessage-bubble" id="msgBubble1">
+            خوش آمدید 👋
+          </div>
+
+          <div class="imessage-bubble" id="msgBubble2">
+            لطفاً رمز را وارد کنید 🔒
+          </div>
+          <div class="delivered-receipt" id="deliveredTag">Delivered</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lock-bottom-login">
+      <div class="lock-avatar-circle" onclick="handleUnlock(event)">AK</div>
+
+      <form class="lock-input-pill" id="lockForm" onsubmit="handleUnlock(event)">
+        <input type="password" id="passcodeInput" class="lock-password-field" placeholder="اینتر بزنید یا ۱۲۳۴ را وارد کنید..." autofocus />
+        <button type="button" onclick="handleUnlock(event)" class="lock-submit-arrow">&rarr;</button>
+      </form>
+
+      <div class="lock-touch-id-text" onclick="handleUnlock(event)" style="cursor:pointer;">Click Enter or Type 1234 to Unlock</div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       2. WORKSPACE
+       ======================================================== -->
+  <main id="desktopApp">
+    
+    <header class="hero-bio-strip">
+      <h1>مهندسی سیستم‌ها، اتوماسیون داده و هوش مصنوعی</h1>
+      <p>
+        کارشناس ارشد مهندسی IT؛ مدل‌سازی <strong>دوقلوی دیجیتال سایبر-فیزیکی</strong>، توسعه یادگیری تقویتی <strong>MARL و SUMO</strong>، اتوماسیون سازمانی با <strong>n8n و Make</strong> و تسریع پیاده‌سازی با رویکرد <strong>Vibe Coding</strong>.
+      </p>
+    </header>
+
+    <div class="keyboard-instruction-banner">
+      <div class="banner-title">
+        <span>💡 روی هر دکمه کلیک کنید یا با کیبورد خود تایپ کنید تا تخصص‌ها باز شوند</span>
+      </div>
+      <div class="banner-badge">INTERACTIVE WORKSPACE</div>
+    </div>
+
+    <div class="macbook-chassis">
+      <div class="macbook-keyboard-bed" id="macKeysContainer">
+        
+        <!-- Row 1 -->
+        <div class="mac-row">
+          <div class="mac-key active-key" data-key="D" onclick="triggerKey('D')">
+            <div class="key-top-meta"><span class="key-char">D</span><span class="key-symbol-badge">🌐</span></div>
+            <div class="key-full-name">Digital Twin</div>
+          </div>
+          <div class="mac-key" data-key="V" onclick="triggerKey('V')">
+            <div class="key-top-meta"><span class="key-char">V</span><span class="key-symbol-badge">🚗</span></div>
+            <div class="key-full-name">V2X Mobility</div>
+          </div>
+          <div class="mac-key" data-key="S" onclick="triggerKey('S')">
+            <div class="key-top-meta"><span class="key-char">S</span><span class="key-symbol-badge">🚦</span></div>
+            <div class="key-full-name">SUMO Sim</div>
+          </div>
+          <div class="mac-key" data-key="T" onclick="triggerKey('T')">
+            <div class="key-top-meta"><span class="key-char">T</span><span class="key-symbol-badge">🔄</span></div>
+            <div class="key-full-name">TraCI Link</div>
+          </div>
+          <div class="mac-key" data-key="P" onclick="triggerKey('P')">
+            <div class="key-top-meta"><span class="key-char">P</span><span class="key-symbol-badge">🧠</span></div>
+            <div class="key-full-name">Deep RL</div>
+          </div>
+          <div class="mac-key" data-key="B" onclick="triggerKey('B')">
+            <div class="key-top-meta"><span class="key-char">B</span><span class="key-symbol-badge">📊</span></div>
+            <div class="key-full-name">Data ETL</div>
+          </div>
+          <div class="mac-key" data-key="N" onclick="triggerKey('N')">
+            <div class="key-top-meta"><span class="key-char">N</span><span class="key-symbol-badge">💬</span></div>
+            <div class="key-full-name">NLP Engine</div>
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="mac-row">
+          <div class="mac-key" data-key="A" onclick="triggerKey('A')">
+            <div class="key-top-meta"><span class="key-char">A</span><span class="key-symbol-badge">🐍</span></div>
+            <div class="key-full-name">Python Auto</div>
+          </div>
+          <div class="mac-key" data-key="8" onclick="triggerKey('8')">
+            <div class="key-top-meta"><span class="key-char">8</span><span class="key-symbol-badge">⚡</span></div>
+            <div class="key-full-name">n8n & Make</div>
+          </div>
+          <div class="mac-key" data-key="G" onclick="triggerKey('G')">
+            <div class="key-top-meta"><span class="key-char">G</span><span class="key-symbol-badge">🤖</span></div>
+            <div class="key-full-name">Agentic MCP</div>
+          </div>
+          <div class="mac-key" data-key="R" onclick="triggerKey('R')">
+            <div class="key-top-meta"><span class="key-char">R</span><span class="key-symbol-badge">🚀</span></div>
+            <div class="key-full-name">AEO/GEO SEO</div>
+          </div>
+          <div class="mac-key" data-key="K" onclick="triggerKey('K')">
+            <div class="key-top-meta"><span class="key-char">K</span><span class="key-symbol-badge">✨</span></div>
+            <div class="key-full-name">Vibe Coding</div>
+          </div>
+          <div class="mac-key" data-key="H" onclick="triggerKey('H')">
+            <div class="key-top-meta"><span class="key-char">H</span><span class="key-symbol-badge">👁️</span></div>
+            <div class="key-full-name">Image Hashing</div>
+          </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="mac-row">
+          <div class="mac-key" data-key="W" onclick="triggerKey('W')">
+            <div class="key-top-meta"><span class="key-char">W</span><span class="key-symbol-badge">📦</span></div>
+            <div class="key-full-name">WordPress</div>
+          </div>
+          <div class="mac-key" data-key="E" onclick="triggerKey('E')">
+            <div class="key-top-meta"><span class="key-char">E</span><span class="key-symbol-badge">🐘</span></div>
+            <div class="key-full-name">PHP Backend</div>
+          </div>
+          <div class="mac-key" data-key="J" onclick="triggerKey('J')">
+            <div class="key-top-meta"><span class="key-char">J</span><span class="key-symbol-badge">⚡</span></div>
+            <div class="key-full-name">JavaScript</div>
+          </div>
+          <div class="mac-key" data-key="M" onclick="triggerKey('M')">
+            <div class="key-top-meta"><span class="key-char">M</span><span class="key-symbol-badge">🎬</span></div>
+            <div class="key-full-name">Creative Media</div>
+          </div>
+        </div>
+
+        <!-- Row 4 -->
+        <div class="mac-row">
+          <div class="mac-key key-space-bar" data-key=" " onclick="triggerKey(' ')">
+            <span class="space-center-text">[ SPACEBAR: FULL-STACK AUTOMATION & SYSTEMS THINKING ]</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Deck -->
+      <div class="macbook-bottom-deck">
+        <div class="palm-stickers-cluster palm-left">
+          <div class="vinyl-sticker stk-vibe" onclick="triggerKey('K')">✨ Vibe Coding</div>
+          <div class="vinyl-sticker stk-pytorch" onclick="triggerKey('P')">🔥 PyTorch RL</div>
+          <div class="vinyl-sticker stk-bigdata" onclick="triggerKey('B')">📊 Data ETL</div>
+        </div>
+
+        <div class="mac-trackpad-glass"></div>
+
+        <div class="palm-stickers-cluster palm-right">
+          <div class="vinyl-sticker stk-twin" onclick="triggerKey('D')">🌐 Digital Twin</div>
+          <div class="vinyl-sticker stk-n8n" onclick="triggerKey('8')">⚡ n8n & Make</div>
+          <div class="vinyl-sticker stk-media" onclick="triggerKey('M')">🎬 Media Lead</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inspector -->
+    <section class="live-inspector-tray" id="inspectorPanel">
+      <div class="insp-top">
+        <div class="insp-badge-key" id="inspBadge">[ D ] DIGITAL TWIN & CPS</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);" id="inspCategory">CYBER-PHYSICAL SYSTEMS & DIGITAL TWIN</div>
+      </div>
+      <div class="insp-heading" id="inspTitle">معماری دوقلوی دیجیتال و مدل‌سازی سایبر-فیزیکی</div>
+      <p class="insp-details" id="inspDesc">
+        تسلط بر مدل ۵ سطحی بلوغ دوقلوی دیجیتال (پیاده‌سازی سطح ۳ پیش‌بین بر بستر مقالات کنفرانس ایتالیا و گرجستان)؛ یکپارچه‌سازی بلادرنگ داده‌های سنسوری با مدل مجازی و شبیه‌سازی سناریوهای پیش‌بینانه (What-If Analysis) جهت بهینه‌سازی سیستم‌های پیچیده صنعتی، معدنی و شهری.
+      </p>
+      <div class="insp-chip-box" id="inspChipBox">
+        <span class="insp-chip">5-Level DT Maturity Framework</span>
+        <span class="insp-chip">Predictive Digital Twin (L3)</span>
+        <span class="insp-chip">Cyber-Physical Systems (CPS)</span>
+        <span class="insp-chip">Sensor Data Telemetry</span>
+        <span class="insp-chip">What-If Scenario Simulation</span>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ========================================================
+    // 1. CANVAS CODE MATRIX
+    // ========================================================
+    const canvas = document.getElementById('codeStreamCanvas');
+    const ctx = canvas.getContext('2d');
+    let width = window.innerWidth || 1200;
+    let height = window.innerHeight || 800;
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth || 1200;
+      height = canvas.height = window.innerHeight || 800;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const denseCodeLibrary = [
+      { text: "import simpy, torch, sumolib, traci", color: "#ff7b72" },
+      { text: "class PS_DGMARL_Lite(torch.nn.Module):", color: "#ffa657" },
+      { text: "    def __init__(self, intersections=9):", color: "#e6edf3" },
+      { text: "        self.reward = -(0.6 * delay + 0.4 * queue)", color: "#79c0ff" },
+      { text: "    def step(self, v2x_actions):", color: "#d2a8ff" },
+      { text: "        return traci.simulationStep(), self.observe_cps()", color: "#7ee787" },
+      { text: "const n8n = new WorkflowEngine({ webhook: true, ai_nodes: true });", color: "#00f2fe" },
+      { text: "const mcp = new ModelContextProtocol({ tool_calling: true });", color: "#d2a8ff" },
+      { text: "const seo = new EngineGEO({ aeo: true, direct_indexing: true });", color: "#00ff88" },
+      { text: "ffmpeg.process(videoInput).pipe(radiobenzStream);", color: "#ff7b72" },
+      { text: "imageHash.phash(imageBuffer, { deduplication: true });", color: "#79c0ff" },
+      { text: "cursorVibe.scaffoldModularApp({ env: 'codespaces' });", color: "#7ee787" },
+      { text: "console.log('✔ All Industrial & AI Systems Online');", color: "#00ff88" }
+    ];
+
+    let rowOffsets = denseCodeLibrary.map(() => Math.random() * 1000);
+
+    function drawDenseCodeStream() {
+      if (!ctx) return;
+      ctx.clearRect(0, 0, width, height);
+      ctx.font = "13px 'JetBrains Mono', monospace";
+      const lineHeight = 20;
+      const numLines = Math.ceil(height / lineHeight) + 2;
+      const colWidth = 280;
+      const numCols = Math.ceil(width / colWidth) + 1;
+
+      for (let c = 0; c < numCols; c++) {
+        const startX = c * colWidth;
+        for (let i = 0; i < numLines; i++) {
+          const item = denseCodeLibrary[(i + c * 3) % denseCodeLibrary.length];
+          const y = i * lineHeight + 12;
+          const x = startX + Math.sin((rowOffsets[(i + c) % rowOffsets.length] + Date.now() * 0.0004)) * 6;
+          ctx.fillStyle = item.color;
+          ctx.fillText(item.text, x, y);
+        }
+      }
+      requestAnimationFrame(drawDenseCodeStream);
+    }
+    drawDenseCodeStream();
+
+    // ========================================================
+    // 2. LIVE TIME & DATE
+    // ========================================================
+    function updateClockAndDate() {
+      try {
+        const now = new Date();
+        const hrs = String(now.getHours()).padStart(2, '0');
+        const mins = String(now.getMinutes()).padStart(2, '0');
+        const clockEl = document.getElementById('liveClock');
+        if (clockEl) clockEl.textContent = `${hrs}:${mins}`;
+
+        const persianFormatter = new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long'
+        });
+        const dateEl = document.getElementById('livePersianDate');
+        if (dateEl) dateEl.textContent = persianFormatter.format(now);
+      } catch(e) {}
+    }
+    setInterval(updateClockAndDate, 1000);
+    updateClockAndDate();
+
+    // ========================================================
+    // 3. SKILLS DATABASE
+    // ========================================================
+    const skillsBase = {
+      'D': {
+        badge: '[ D ] DIGITAL TWIN & CPS',
+        cat: 'CYBER-PHYSICAL SYSTEMS & DIGITAL TWIN',
+        title: 'معماری دوقلوی دیجیتال و مدل‌سازی سایبر-فیزیکی',
+        desc: 'تسلط بر مدل ۵ سطحی بلوغ دوقلوی دیجیتال (پیاده‌سازی سطح ۳ پیش‌بین بر بستر مقالات کنفرانس ایتالیا و گرجستان)؛ یکپارچه‌سازی بلادرنگ داده‌های سنسوری با مدل مجازی و شبیه‌سازی سناریوهای پیش‌بینانه (What-If Analysis) جهت بهینه‌سازی سیستم‌های پیچیده صنعتی، معدنی و شهری.',
+        chips: ['5-Level DT Maturity Framework', 'Predictive Digital Twin (L3)', 'Cyber-Physical Systems (CPS)', 'Sensor Data Telemetry', 'What-If Scenario Simulation']
+      },
+      'V': {
+        badge: '[ V ] V2X PROTOCOLS & MOBILITY',
+        cat: 'INTELLIGENT TRANSPORTATION SYSTEMS (ITS) & V2X',
+        title: 'ارتباطات V2X و حمل‌ونقل هوشمند',
+        desc: 'طراحی و مدل‌سازی پروتکل‌های ارتباطی خودرویی V2X (شامل ارتباط خودرو به زیرساخت V2I، خودرو به خودرو V2V و شبکه V2N)؛ پیاده‌سازی راهنمایی سرعت پویا، سناریوهای پلاتونینگ (Platooning با تنظیم tau و minGap) و مدیریت جریان ناوگان متصل (CAVs).',
+        chips: ['V2X Protocols (V2V / V2I / V2N)', 'Connected Autonomous Vehicles (CAV)', 'Platooning Optimization', 'Speed Guidance Logic', 'Adaptive Signal Control']
+      },
+      'S': {
+        badge: '[ S ] MICROSCOPIC TRAFFIC SIMULATION',
+        cat: 'MICROSCOPIC TRAFFIC & NETWORK MODELING',
+        title: 'شبیه‌سازی میکروسکوپیک با SUMO',
+        desc: 'مدل‌سازی و شبیه‌سازی میکروسکوپیک جریان‌های ترافیکی در شبیه‌ساز Eclipse SUMO؛ پیکربندی فایل‌های شبکه net.xml با Netedit، تعریف سناریوهای تقاضای سفر rou.xml، مدل‌سازی شبکه‌های تقاطع تکی (1x1) و شبکه ۹ تقاطعی (3x3) و تولید داده‌های سنتتیک.',
+        chips: ['Eclipse SUMO', 'Netedit & XML Modeling', 'Microscopic Simulation', 'Grid Networks (1x1 & 3x3)', 'Synthetic Data Generation']
+      },
+      'T': {
+        badge: '[ T ] REAL-TIME CO-SIMULATION & TraCI',
+        cat: 'CLOSED-LOOP CO-SIMULATION & INTERFACING',
+        title: 'هم‌شبیه‌سازی و کنترل برخط با TraCI',
+        desc: 'ایجاد پل ارتباطی سوکت بی‌درنگ (Co-Simulation) میان اسکریپت‌های پایتون و موتور شبیه‌ساز با پروتکل TraCI؛ استخراج برخط بردارهای وضعیت (طول صف، تاخیر و سرعت) و اعمال فرامین کنترلی دینامیک در حلقه‌های کنترلی بسته (Closed-Loop Control).',
+        chips: ['TraCI Protocol', 'Real-Time Co-Simulation', 'Closed-Loop System Control', 'State Extraction & Observation', 'Python-Engine Sockets']
+      },
+      'P': {
+        badge: '[ P ] DEEP REINFORCEMENT LEARNING',
+        cat: 'REINFORCEMENT LEARNING & MULTI-AGENT SYSTEMS',
+        title: 'یادگیری تقویتی عمیق و چندعاملی (MARL)',
+        desc: 'فرمول‌بندی فرآیند تصمیم‌گیری مارکوف (MDP) و طراحی توابع پاداش چندمعیاره؛ آموزش مدل‌های تک‌عاملی (A2C با معماری MLP) و چندعاملی (PS-DGMARL-Lite با اشتراک پارامتر) با PyTorch، TensorFlow و Stable-Baselines3 در محیط‌های سفارشی Gymnasium.',
+        chips: ['Deep Reinforcement Learning (DRL)', 'Stable-Baselines3 & Gymnasium', 'PyTorch & TensorFlow', 'A2C & PS-DGMARL-Lite', 'Multi-Agent RL (MARL)']
+      },
+      'B': {
+        badge: '[ B ] DATA PIPELINES & ANALYTICS',
+        cat: 'DATA PIPELINES, ETL & APPLIED ANALYTICS',
+        title: 'مهندسی داده، پایپ‌لاین‌های ETL و تحلیل آماری',
+        desc: 'طراحی پایپ‌لاین‌های استخراج، پاک‌سازی (ETL) و نرمال‌سازی داده‌های حجیم شبیه‌سازی و سنسوری با Pandas و NumPy؛ تحلیل آماری شاخص‌های کلیدی عملکرد (KPIs)، ارزیابی پایداری مدل‌ها روی سیدهای تصادفی و رسم نمودارهای تحلیلی با Matplotlib.',
+        chips: ['Data Pipelines (ETL)', 'Data Normalization & Scaling', 'Exploratory Data Analysis (EDA)', 'Pandas & NumPy', 'KPI Analytics & Matplotlib']
+      },
+      'N': {
+        badge: '[ N ] NLP & TEXT PROCESSING',
+        cat: 'NATURAL LANGUAGE PROCESSING (NLP)',
+        title: 'پردازش زبان طبیعی و مهندسی متن',
+        desc: 'استخراج، تمیزکاری و نرمال‌سازی داده‌های متنی با اسکریپت‌های پایتون، پردازش عبارات منظم (Regex)، تحلیل ساختاریافته متون، آماده‌سازی پرامپت‌های مهندسی و ساخت دیتاست‌های زبانی برای مدل‌های هوش مصنوعی.',
+        chips: ['Natural Language Processing', 'Text Mining & Regex', 'String Normalization', 'Topic & Text Parsing', 'Dataset Preparation']
+      },
+      'A': {
+        badge: '[ A ] PURE PYTHON AUTOMATION',
+        cat: 'CUSTOM BACKEND AUTOMATION & SCRIPTING',
+        title: 'اتوماسیون خالص با پایتون و ربات‌های اختصاصی',
+        desc: 'توسعه اسکریپت‌های اتوماسیون مستقل بر بستر سرورهای لینوکسی (VPS)؛ وب‌اسکرپینگ داده‌ها با BeautifulSoup و Requests، زمان‌بندی تسک‌ها با Cron Jobs، ساخت ربات‌های مستقل تلگرام و اتصال مستقیم به وب‌سرویس‌ها بدون وابستگی به ابزارهای آماده.',
+        chips: ['Python Automation Scripts', 'Linux VPS Deployment', 'BeautifulSoup Scraping', 'Cron Job Scheduling', 'Telegram Bot API', 'Headless Automation']
+      },
+      '8': {
+        badge: '[ 8 ] WORKFLOW ORCHESTRATION',
+        cat: 'BUSINESS PROCESS AUTOMATION (BPA) & LOW-CODE',
+        title: 'ارکستراسیون پیشرفته جریان‌های داده (n8n و Make)',
+        desc: 'ارکستراسیون فرآیندهای پیچیده سازمانی در n8n سلف‌هاست و پلتفرم Make.com؛ مدیریت وب‌هوک‌های بلادرنگ، ارسال درخواست‌های HTTP، ادغام نودهای هوش مصنوعی (AI Nodes)، و یکپارچه‌سازی پایگاه‌های داده و پلتفرم‌های ابری.',
+        chips: ['Self-Hosted n8n', 'Make.com Scenarios', 'AI Nodes Integration', 'Webhook & HTTP Triggers', 'Multi-Branch Data Routing', 'SaaS Integrations']
+      },
+      'G': {
+        badge: '[ G ] AGENTIC AI & MCP PROTOCOL',
+        cat: 'AUTONOMOUS AGENTS & LLM ARCHITECTURE',
+        title: 'عامل‌های خودفرمان هوشمند و پروتکل MCP',
+        desc: 'توسعه ایجنت‌های هوشمند با قابلیت تصمیم‌گیری و برنامه‌ریزی مستقل، فراخوانی توابع و ابزارها (Tool Calling / Function Calling)، ادغام با پروتکل کانتکست مدل (MCP) و اتصال مستقیم API مدل‌های زبانی به سامانه‌های عملیاتی.',
+        chips: ['Agentic AI Systems', 'Model Context Protocol (MCP)', 'Tool Calling (Function Calling)', 'Autonomous Task Execution', 'LLM API Integration']
+      },
+      'R': {
+        badge: '[ R ] NEXT-GEN SEO: GEO / AEO / AIO',
+        cat: 'GENERATIVE ENGINE OPTIMIZATION (GEO) & CONTENT ENGINES',
+        title: 'سئو نوین هوش مصنوعی (GEO / AEO / AIO) و کارخانه محتوا',
+        desc: 'راه‌اندازی کارخانه تولید و بازنویسی خودکار مقالات بر پایه استانداردهای سئو نوین هوش مصنوعی (GEO/AEO/AIO) جهت دیده‌شدن در پاسخ‌های مستقیم موتورهای جستجوی هوشمند (مانند ChatGPT Search، Perplexity و Google AI Overviews) و انتشار مستقیم در وب‌سایت.',
+        chips: ['Generative Engine Optimization (GEO)', 'Answer Engine Optimization (AEO)', 'AI Optimization (AIO)', 'AI Content Pipelines', 'Automated Publishing']
+      },
+      'K': {
+        badge: '[ K ] VIBE CODING & RAPID DEV',
+        cat: 'AI-ASSISTED DEVELOPMENT & RAPID MVP',
+        title: 'وایب‌کدینگ (Vibe Coding) و توسعه سریع نرم‌افزار',
+        desc: 'توسعه فوق‌سریع و معماری نرم‌افزار با هدایت هوش مصنوعی و پرامپت‌نویسی پیشرفته در Cursor و Claude؛ تولید فوری نسخه‌های اولیه (MVP)، رفع خطاهای پیچیده و اجرای سیستم در محیط‌های ابری لینوکسی (GitHub Codespaces).',
+        chips: ['AI-Assisted Engineering', 'Cursor & Claude Workflows', 'GitHub Codespaces', 'Rapid MVP Scaffolding', 'Modular Dev']
+      },
+      'H': {
+        badge: '[ H ] IMAGE HASHING & VISION',
+        cat: 'IMAGE PROCESSING & VISION UTILITIES',
+        title: 'پردازش تصویر و الگوریتم‌های هش مدیا',
+        desc: 'توسعه ابزارهای پردازش دسته‌ای تصاویر با OpenCV و PIL؛ پیاده‌سازی الگوریتم‌های هش ادراکی (Image Hashing) جهت تشخیص تصاویر تکراری، سیستم‌های خودکار درج واترمارک و بهینه‌سازی انبوه فایل‌های مدیا.',
+        chips: ['Perceptual Image Hashing', 'Duplicate Detection', 'Watermarking Systems', 'Batch Image Processing', 'OpenCV & PIL']
+      },
+      'W': {
+        badge: '[ W ] WORDPRESS ARCHITECTURE',
+        cat: 'CMS ARCHITECTURE & WEB ENGINEERING',
+        title: 'توسعه وب، هسته وردپرس و دیتابیس',
+        desc: 'توسعه قالب‌های اختصاصی وردپرس، پیاده‌سازی هوک‌ها و فیلترهای هسته، ساختاردهی بهینه پایگاه داده MySQL، توسعه اندپوینت‌های سفارشی REST API و بهینه‌سازی ساختار سایت برای ترافیک بالا.',
+        chips: ['Custom Theme Development', 'WordPress Core Hooks', 'MySQL Database Design', 'REST API Endpoints', 'High-Performance CMS']
+      },
+      'E': {
+        badge: '[ E ] PHP BACKEND & PANELS',
+        cat: 'PHP BACKEND & SERVER-SIDE LOGIC',
+        title: 'برنامه‌نویسی بک‌اند PHP و داشبوردهای نظارتی',
+        desc: 'برنامه‌نویسی شیءگرا و ماژولار با PHP، ساخت داشبوردهای نظارتی و مدیریتی اختصاصی، نوشتن وب‌سرویس‌های امن، بهینه‌سازی کوئری‌های ارتباط با دیتابیس و مدیریت سیستم‌های احراز هویت.',
+        chips: ['PHP OOP Backend', 'Admin & Monitoring Panels', 'RESTful API Architecture', 'MySQL Optimization', 'Server-Side Logic']
+      },
+      'J': {
+        badge: '[ J ] JAVASCRIPT & DYNAMIC UI',
+        cat: 'FRONTEND LOGIC & INTERACTIVE UI',
+        title: 'جاوااسکریپت، وب تعاملی و انیمیشن Canvas',
+        desc: 'طراحی رابط‌های کاربری تعاملی و مدرن با Vanilla JS، رندر انیمیشن‌های سبک با HTML5 Canvas 2D، پردازش داده‌های ناهمگام (Async/Fetch) و کنترل داینامیک وضعیت سیستم در وب‌اپلیکیشن‌ها.',
+        chips: ['Modern JavaScript (ES6+)', 'HTML5 Canvas 2D', 'Interactive UI/UX', 'Async & Fetch APIs', 'Dynamic State Control']
+      },
+      'M': {
+        badge: '[ M ] CREATIVE MEDIA & BRANDING',
+        cat: 'CREATIVE MEDIA PRODUCTION, VIDEO & BRANDING',
+        title: 'پروداکشن مدیا، تدوین ویدیو و هویت بصری',
+        desc: 'مدیریت رسانه و هدایت کامل خط تولید محتوای ویدیویی و بصری (برند رادیوبنز)؛ تدوین پیشرفته ویدیو با Premiere Pro، ساخت موشن‌گرافیک و تیزر با After Effects، طراحی هویت بصری و کاورها با Photoshop و Illustrator، پردازش صوت و ویدیو با CapCut و FFmpeg.',
+        chips: ['Premiere Pro', 'After Effects', 'Photoshop & Illustrator', 'CapCut & FFmpeg', 'RadioBenz Media Lead', 'Motion Design & VFX']
+      },
+      ' ': {
+        badge: '[ SPACEBAR ] FULL-STACK AUTOMATION',
+        cat: 'SYSTEMS ENGINEERING & APPLIED AUTOMATION',
+        title: 'دیدگاه مهندسی: اتوماسیون کامل و حل مسائل پیچیده',
+        desc: 'اتصال دانش شبیه‌سازی دانشگاهی به اتوماسیون فرآیندها و ابزارهای سریع توسعه برای حل مسائل پیچیده، حذف کارهای تکراری و خلق سیستم‌های خودکار مقیاس‌پذیر.',
+        chips: ['Full-Stack Automation', 'Engineering Problem Solving', 'Rapid Prototyping', 'Scalable Architecture', 'Continuous Level-Up']
+      }
+    };
+
+    // ========================================================
+    // 4. SOUND
+    // ========================================================
+    let audioCtx = null;
+    function playTactileClick(freq = 400) {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(70, audioCtx.currentTime + 0.05);
+
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+      } catch(e) {}
+    }
+
+    // ========================================================
+    // 5. KEYBOARD ACTIONS
+    // ========================================================
+    function triggerKey(keyChar) {
+      const char = keyChar.toUpperCase();
+      const data = skillsBase[char] || skillsBase[' '];
+
+      playTactileClick(char === ' ' ? 240 : 380 + char.charCodeAt(0) * 3);
+
+      document.querySelectorAll('.mac-key').forEach(k => k.classList.remove('active-key', 'pressed'));
+      const target = document.querySelector(`.mac-key[data-key="${char}"]`) || document.querySelector(`.mac-key[data-key=" "]`);
+      if (target) {
+        target.classList.add('pressed', 'active-key');
+        setTimeout(() => target.classList.remove('pressed'), 100);
+      }
+
+      const inspector = document.getElementById('inspectorPanel');
+      if (inspector) {
+        inspector.style.opacity = '0.5';
+        inspector.style.transform = 'translateY(4px)';
+
+        setTimeout(() => {
+          document.getElementById('inspBadge').textContent = data.badge;
+          document.getElementById('inspCategory').textContent = data.cat;
+          document.getElementById('inspTitle').textContent = data.title;
+          document.getElementById('inspDesc').textContent = data.desc;
+
+          const chipContainer = document.getElementById('inspChipBox');
+          chipContainer.innerHTML = '';
+          data.chips.forEach(c => {
+            const span = document.createElement('span');
+            span.className = 'insp-chip';
+            span.textContent = c;
+            chipContainer.appendChild(span);
+          });
+
+          inspector.style.opacity = '1';
+          inspector.style.transform = 'translateY(0)';
+        }, 70);
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      const lock = document.getElementById('macLockScreen');
+      if (lock && lock.style.display !== 'none') return;
+      const k = e.key === ' ' ? ' ' : e.key.toUpperCase();
+      if (skillsBase[k]) triggerKey(k);
+    });
+
+    // ========================================================
+    // 6. UNLOCK HANDLER
+    // ========================================================
+    function handleUnlock(e) {
+      if (e) e.preventDefault();
+      playTactileClick(560);
+      const lock = document.getElementById('macLockScreen');
+      const desktop = document.getElementById('desktopApp');
+
+      if (lock && desktop) {
+        lock.style.opacity = '0';
+        setTimeout(() => {
+          lock.style.display = 'none';
+          desktop.style.display = 'flex';
+          setTimeout(() => {
+            desktop.style.opacity = '1';
+            desktop.style.transform = 'translateY(0)';
+            triggerKey('D');
+          }, 50);
+        }, 400);
+      }
+    }
+  </script>
+</body>
+</html>
